@@ -8,38 +8,46 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        /* Базовые настройки */
+        /* Базовые настройки (Цвета: Антрацит + Техно-синий) */
+        :root {
+            --bg-dark: #121418; /* Глубокий графит */
+            --bg-card: #1a1d24; /* Чуть светлее для карточек */
+            --accent: #00d2ff; /* Холодный техно-синий (циан) */
+            --accent-hover: #00a3c4;
+            --text-main: #f0f4f8;
+            --text-muted: #8b949e;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0d0d0d;
-            color: #f0f0f0;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
             line-height: 1.6;
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
         h1, h2, h3 { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
         a { text-decoration: none; color: inherit; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
         /* Хедер */
         header {
             position: fixed; top: 0; width: 100%; padding: 20px 5%;
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(13, 13, 13, 0.9); backdrop-filter: blur(12px);
-            z-index: 1000; border-bottom: 1px solid rgba(255, 107, 0, 0.15);
+            background: rgba(18, 20, 24, 0.9); backdrop-filter: blur(12px);
+            z-index: 1000; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
         .logo { font-family: 'Oswald', sans-serif; font-size: 1.8rem; font-weight: 700; color: #fff; }
-        .logo span { color: #FF6B00; }
+        .logo span { color: var(--accent); }
         .nav-links { display: flex; gap: 30px; }
-        .nav-links a { font-size: 0.9rem; font-weight: 600; transition: color 0.3s; }
-        .nav-links a:hover { color: #FF6B00; }
+        .nav-links a { font-size: 0.9rem; font-weight: 600; transition: color 0.3s; color: var(--text-muted); }
+        .nav-links a:hover { color: var(--text-main); }
         .btn-header {
-            background: #FF6B00; color: #fff; padding: 10px 25px;
-            font-weight: 600; border-radius: 4px; text-transform: uppercase; font-size: 0.85rem;
-            transition: background 0.3s, transform 0.2s; border: none; cursor: pointer;
+            background: var(--accent); color: #000; padding: 12px 25px;
+            font-weight: 700; border-radius: 4px; text-transform: uppercase; font-size: 0.85rem;
+            transition: all 0.3s; border: none; cursor: pointer;
         }
-        .btn-header:hover { background: #e55f00; transform: translateY(-2px); }
+        .btn-header:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 210, 255, 0.3); }
 
         /* Главный экран (Hero) */
         .hero {
@@ -48,138 +56,128 @@
             align-items: center;
             padding: 0 5%;
             position: relative;
-            background: linear-gradient(135deg, rgba(13,13,13,0.95) 0%, rgba(13,13,13,0.7) 100%), 
+            background: linear-gradient(135deg, rgba(18, 20, 24, 0.95) 0%, rgba(18, 20, 24, 0.8) 100%), 
                         url('https://images.unsplash.com/photo-1565514020179-026b92b84bb6?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+            overflow: hidden;
         }
-        .hero-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 50px; align-items: center; width: 100%; z-index: 2; }
+        
+        #canvas-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; pointer-events: none;
+        }
+
+        .hero-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 50px; align-items: center; width: 100%; z-index: 2; position: relative; }
         .hero-text { animation: fadeUp 1s ease-out; }
-        .hero-text h1 { font-size: 4.5rem; line-height: 1.1; margin-bottom: 20px; }
-        .hero-text h1 span { color: #FF6B00; }
-        .hero-text p { font-size: 1.2rem; color: #b0b0b0; margin-bottom: 40px; max-width: 600px; }
+        .hero-text h1 { font-size: 4.5rem; line-height: 1.1; margin-bottom: 20px; text-shadow: 0 5px 15px rgba(0,0,0,0.8); }
+        .hero-text h1 span { color: var(--accent); }
+        .hero-text p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 40px; max-width: 600px; }
         
         .btn-main {
-            display: inline-block; background: #FF6B00; color: #fff;
-            padding: 18px 40px; font-size: 1.1rem; font-weight: 600;
+            display: inline-block; background: var(--accent); color: #000;
+            padding: 18px 40px; font-size: 1.1rem; font-weight: 700;
             text-transform: uppercase; letter-spacing: 1px; border-radius: 4px;
-            transition: background 0.3s, transform 0.2s;
-            box-shadow: 0 10px 30px rgba(255, 107, 0, 0.2);
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 210, 255, 0.2);
         }
-        .btn-main:hover { background: #e55f00; transform: translateY(-3px); }
+        .btn-main:hover { background: var(--accent-hover); transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0, 210, 255, 0.4); }
 
         .hero-card {
             background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08); padding: 40px; border-radius: 12px;
             animation: fadeLeft 1s ease-out 0.3s both;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
-        .hero-card h3 { font-size: 1.5rem; margin-bottom: 20px; color: #FF6B00; }
+        .hero-card h3 { font-size: 1.5rem; margin-bottom: 20px; color: #fff; }
         .hero-card ul { list-style: none; }
-        .hero-card ul li { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-size: 1.05rem; }
-        .hero-card ul li::before { content: '■'; color: #FF6B00; font-size: 0.8rem; }
+        .hero-card ul li { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-size: 1.05rem; color: var(--text-main); }
+        .hero-card ul li::before { content: '■'; color: var(--accent); font-size: 0.8rem; }
 
         /* Секция Услуги */
-        .services { padding: 100px 5%; background: #0d0d0d; }
+        .services { padding: 100px 5%; background: var(--bg-dark); position: relative; }
         .section-title { text-align: center; margin-bottom: 60px; }
         .section-title h2 { font-size: 3rem; color: #fff; margin-bottom: 15px; }
-        .section-title h2 span { color: #FF6B00; }
-        .section-title p { color: #b0b0b0; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        .section-title h2 span { color: var(--accent); }
+        .section-title p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
         
         .grid-services { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
         
         .service-card {
-            position: relative;
-            background: #111;
-            border: 1px solid #222;
-            border-radius: 8px;
-            padding: 40px 30px;
-            height: 250px;
-            overflow: hidden;
-            cursor: pointer;
+            position: relative; background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px;
+            padding: 40px 30px; height: 260px; overflow: hidden; cursor: pointer;
             transition: all 0.4s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
+            display: flex; flex-direction: column; justify-content: flex-start;
         }
         .service-card:hover {
-            background: linear-gradient(135deg, #FF6B00 0%, #cc5500 100%);
-            border-color: #FF6B00;
+            background: linear-gradient(135deg, #1e222a 0%, var(--bg-card) 100%);
+            border-color: var(--accent);
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(255, 107, 0, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 210, 255, 0.1);
         }
-        .icon-box {
-            font-size: 2rem; margin-bottom: 20px; background: rgba(255, 107, 0, 0.1);
-            width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;
-            border-radius: 8px; color: #FF6B00; transition: all 0.4s ease;
-        }
-        .service-card:hover .icon-box { background: rgba(255, 255, 255, 0.2); color: #fff; }
-        .service-card h3 { font-size: 1.4rem; color: #fff; transition: all 0.4s ease; z-index: 2; position: relative; }
         
+        .icon-box {
+            font-size: 2.5rem; margin-bottom: 20px; background: rgba(255, 255, 255, 0.05);
+            width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;
+            border-radius: 12px; color: var(--text-main); transition: all 0.4s ease;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+        .service-card:hover .icon-box { 
+            color: var(--accent); background: rgba(0, 210, 255, 0.1);
+            transform: scale(1.1);
+        }
+
+        .service-card h3 { font-size: 1.4rem; color: #fff; transition: all 0.4s ease; z-index: 2; position: relative; }
         .service-desc {
             position: absolute; bottom: 30px; left: 30px; right: 30px;
-            color: #fff; font-size: 0.95rem; opacity: 0; transform: translateY(20px);
+            color: var(--text-muted); font-size: 0.95rem; opacity: 0; transform: translateY(20px);
             transition: all 0.4s ease; z-index: 2;
         }
-        .service-card:hover .service-desc { opacity: 1; transform: translateY(0); }
+        .service-card:hover .service-desc { opacity: 1; transform: translateY(0); color: #ccc; }
 
         /* Секция Почему мы */
-        .why-us { padding: 100px 5%; background: #080808; }
+        .why-us { padding: 100px 5%; background: #0b0c0f; }
         .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
         
         .feature-item {
-            padding: 30px;
-            border-left: 2px solid #FF6B00;
-            background: rgba(255, 255, 255, 0.02);
-            transition: background 0.3s;
+            padding: 30px; border-left: 2px solid var(--accent);
+            background: rgba(255, 255, 255, 0.02); transition: all 0.3s;
         }
-        .feature-item:hover { background: rgba(255, 107, 0, 0.05); }
-        
-        .feature-number {
-            font-family: 'Oswald', sans-serif;
-            font-size: 3rem;
-            color: #FF6B00;
-            opacity: 0.3;
-            font-weight: 700;
-            margin-bottom: 10px;
-            line-height: 1;
-        }
+        .feature-item:hover { background: rgba(0, 210, 255, 0.05); transform: translateX(10px); }
+        .feature-number { font-family: 'Oswald', sans-serif; font-size: 3rem; color: var(--accent); opacity: 0.3; font-weight: 700; margin-bottom: 10px; line-height: 1; }
         .feature-item h3 { font-size: 1.3rem; margin-bottom: 15px; color: #fff; }
-        .feature-item p { color: #888; font-size: 0.95rem; }
+        .feature-item p { color: var(--text-muted); font-size: 0.95rem; }
 
         /* Контакты и Форма */
-        .contact-section { padding: 100px 5%; background: #0d0d0d; }
+        .contact-section { padding: 100px 5%; background: var(--bg-dark); }
         .contact-container { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; max-width: 1200px; margin: 0 auto; }
         
-        .contact-info h2 { font-size: 2.5rem; margin-bottom: 30px; }
-        .contact-info p { color: #b0b0b0; margin-bottom: 30px; font-size: 1.1rem; }
-        .contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; font-size: 1.1rem; }
-        .contact-item span { color: #FF6B00; font-size: 1.5rem; }
+        .contact-info h2 { font-size: 2.5rem; margin-bottom: 30px; color: #fff; }
+        .contact-info p { color: var(--text-muted); margin-bottom: 30px; font-size: 1.1rem; }
+        .contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; font-size: 1.1rem; color: var(--text-main); }
+        .contact-item span { color: var(--accent); font-size: 1.5rem; }
 
-        .contact-form { 
-            background: #111; padding: 50px; border-radius: 8px; 
-            border: 1px solid #222; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        }
+        .contact-form { background: var(--bg-card); padding: 50px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
         .contact-form h3 { font-size: 1.8rem; margin-bottom: 30px; color: #fff; }
         .form-group { margin-bottom: 20px; }
         .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 16px; background: #050505; border: 1px solid #333;
-            color: #fff; border-radius: 4px; font-family: 'Inter', sans-serif; font-size: 1rem;
-            transition: border-color 0.3s;
+            width: 100%; padding: 16px; background: var(--bg-dark); border: 1px solid #333;
+            color: #fff; border-radius: 4px; font-family: 'Inter', sans-serif; font-size: 1rem; transition: border-color 0.3s;
         }
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #FF6B00; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
         .form-group textarea { resize: vertical; height: 120px; }
         
         .btn-submit {
-            width: 100%; background: #FF6B00; color: #fff; padding: 18px;
-            border: none; border-radius: 4px; font-size: 1.1rem; font-weight: 600;
-            text-transform: uppercase; cursor: pointer; transition: all 0.3s;
-            letter-spacing: 1px;
+            width: 100%; background: var(--accent); color: #000; padding: 18px;
+            border: none; border-radius: 4px; font-size: 1.1rem; font-weight: 700;
+            text-transform: uppercase; cursor: pointer; transition: all 0.3s; letter-spacing: 1px;
         }
-        .btn-submit:hover { background: #e55f00; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(255,107,0,0.3); }
+        .btn-submit:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 210, 255, 0.3); }
 
         /* Футер */
-        footer { padding: 40px 5%; background: #050505; text-align: center; border-top: 1px solid #1a1a1a; }
-        footer p { color: #666; font-size: 0.9rem; margin-bottom: 10px; }
-        footer a { color: #888; text-decoration: underline; transition: color 0.3s; }
-        footer a:hover { color: #FF6B00; }
+        footer { padding: 40px 5%; background: #050608; text-align: center; border-top: 1px solid #1a1a1a; }
+        footer p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px; }
+        footer a { color: var(--text-main); text-decoration: underline; transition: color 0.3s; }
+        footer a:hover { color: var(--accent); }
 
         /* Анимации */
         @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
@@ -200,6 +198,7 @@
             .contact-form { padding: 30px 20px; }
             .services { padding: 60px 5%; }
             .grid-services { grid-template-columns: 1fr; }
+            #canvas-container { opacity: 0.4; }
         }
     </style>
 </head>
@@ -216,8 +215,9 @@
         <a href="#contact" class="btn-header">Заказать расчет</a>
     </header>
 
-    <!-- Главный экран -->
+    <!-- Главный экран с 3D-искрами -->
     <section class="hero" id="home">
+        <div id="canvas-container"></div>
         <div class="hero-container">
             <div class="hero-text">
                 <h1>Высокоточная <span>металлообработка</span> в СПб</h1>
@@ -311,31 +311,19 @@
     <section class="contact-section" id="contact">
         <div class="contact-container">
             <div class="contact-info">
-                <h2>Оставить <span style="color:#FF6B00;">заявку</span></h2>
+                <h2>Оставить <span style="color:var(--accent);">заявку</span></h2>
                 <p>Оставьте заявку, и мы в течение 1-2 рабочих дней рассчитаем точную стоимость вашего заказа абсолютно бесплатно.</p>
-                <div class="contact-item">
-                    <span>📍</span> СПб, Придорожная аллея, 8
-                </div>
-                <div class="contact-item">
-                    <span>📞</span> 8 (812) 919-24-43
-                </div>
-                <div class="contact-item">
-                    <span>✉️</span> info@mfactured.ru
-                </div>
-                <div class="contact-item">
-                    <span>⏰</span> Пн-Пт с 09:00 до 20:00
-                </div>
+                <div class="contact-item"><span>📍</span> СПб, Придорожная аллея, 8</div>
+                <div class="contact-item"><span>📞</span> 8 (812) 919-24-43</div>
+                <div class="contact-item"><span>✉️</span> info@mfactured.ru</div>
+                <div class="contact-item"><span>⏰</span> Пн-Пт с 09:00 до 20:00</div>
             </div>
 
             <div class="contact-form">
                 <h3>Заполните форму</h3>
                 <form id="orderForm">
-                    <div class="form-group">
-                        <input type="text" placeholder="Ваше имя" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="tel" placeholder="Телефон" required>
-                    </div>
+                    <div class="form-group"><input type="text" placeholder="Ваше имя" required></div>
+                    <div class="form-group"><input type="tel" placeholder="Телефон" required></div>
                     <div class="form-group">
                         <select required>
                             <option value="" disabled selected>Выберите услугу</option>
@@ -347,9 +335,7 @@
                             <option>Изготовление букв / табличек</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <textarea placeholder="Опишите задачу или прикрепите ссылку на чертеж"></textarea>
-                    </div>
+                    <div class="form-group"><textarea placeholder="Опишите задачу или прикрепите ссылку на чертеж"></textarea></div>
                     <button type="submit" class="btn-submit">Отправить заявку</button>
                 </form>
             </div>
@@ -362,12 +348,75 @@
         <p><a href="https://mfactured.ru/politika" target="_blank">Политика конфиденциальности</a></p>
     </footer>
 
-    <!-- Скрипт для формы -->
+    <!-- Скрипт формы -->
     <script>
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
             alert('Спасибо! Ваша заявка отправлена. Мы свяжемся с вами в ближайшее время.');
             this.reset();
+        });
+    </script>
+
+    <!-- Скрипт 3D (Three.js) - Искры цвета Циан -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 600; // Чуть меньше частиц для легкости
+        const posArray = new Float32Array(particlesCount * 3);
+        
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 15;
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        // Искры теперь холодного синего цвета (0x00d2ff)
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.03,
+            color: 0x00d2ff,
+            transparent: true,
+            opacity: 0.6,
+            blending: THREE.AdditiveBlending
+        });
+        
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = event.clientX / window.innerWidth - 0.5;
+            mouseY = event.clientY / window.innerHeight - 0.5;
+        });
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+
+            particlesMesh.rotation.y = elapsedTime * 0.05 + mouseX * 0.5;
+            particlesMesh.rotation.x = mouseY * 0.5;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         });
     </script>
 </body>
