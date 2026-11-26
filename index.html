@@ -56,17 +56,37 @@
         .hero {
             height: 100vh;
             display: flex; flex-direction: column; justify-content: center;
-            padding: 0 5%;
+            padding: 120px 5% 60px 5%;
             position: relative;
-            background: linear-gradient(to right, rgba(5,5,5,1) 0%, rgba(5,5,5,0.8) 50%, rgba(5,5,5,0.4) 100%), 
-                        url('https://images.unsplash.com/photo-1565514020179-026b92b84bb6?q=80&w=2070&auto=format&fit=crop') center right/cover no-repeat;
+            background-color: #0a0a0a;
+            background-image: 
+                linear-gradient(90deg, rgba(5,5,5,0.95) 0%, rgba(5,5,5,0.7) 50%, rgba(5,5,5,0.3) 100%), 
+                url('https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center right;
             border-bottom: 1px solid var(--border);
         }
 
-        .hero-content { position: relative; z-index: 2; max-width: 800px; margin-top: 50px; }
-        .hero h1 { font-size: 7.5rem; line-height: 0.9; margin-bottom: 30px; color: #fff; }
+        .hero-content { 
+            position: relative; z-index: 2; 
+            max-width: 800px; 
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+        
+        .hero h1 { font-size: 6.5rem; line-height: 0.9; margin-bottom: 30px; color: #fff; }
         .hero h1 span { color: var(--accent); }
         .hero p { font-size: 1.2rem; color: #aaa; margin-bottom: 50px; max-width: 500px; }
+
+        /* Статистика */
+        .hero-stats {
+            display: flex; gap: 60px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 30px; margin-top: 40px;
+            z-index: 2; position: relative;
+        }
+        .stat-item .stat-num { font-family: 'Oswald', sans-serif; font-size: 2.5rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 5px; }
+        .stat-item .stat-text { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
         /* СЕКЦИЯ УСЛУГ */
         .services { padding: 120px 5%; background: var(--bg); }
@@ -106,7 +126,7 @@
         .service-arrow { font-size: 1.5rem; color: var(--accent); transition: transform 0.3s; }
         .service-row:hover .service-arrow { transform: translateX(10px); }
 
-        /* СЕКЦИЯ ПРЕИМУЩЕСТВ (Исправленный блок) */
+        /* СЕКЦИЯ ПРЕИМУЩЕСТВ */
         .features { 
             padding: 120px 5%; 
             background: var(--surface); 
@@ -115,10 +135,7 @@
             border-bottom: 1px solid var(--border); 
         }
         
-        .features-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .features-container { max-width: 1200px; margin: 0 auto; }
 
         .features .section-header { border-bottom-color: var(--border); max-width: 100%; }
         .features .section-header h2 { color: #fff; }
@@ -144,18 +161,8 @@
             color: var(--accent); 
             margin-bottom: 15px; 
         }
-        .feature-item h3 { 
-            font-size: 1.1rem; 
-            margin-bottom: 10px; 
-            color: #fff; 
-            letter-spacing: 0; 
-            font-family: 'Inter', sans-serif; 
-            font-weight: 600; 
-        }
-        .feature-item p { 
-            color: var(--text-muted); 
-            font-size: 0.9rem; 
-        }
+        .feature-item h3 { font-size: 1.1rem; margin-bottom: 10px; color: #fff; letter-spacing: 0; font-family: 'Inter', sans-serif; font-weight: 600; }
+        .feature-item p { color: var(--text-muted); font-size: 0.9rem; }
 
         /* КОНТАКТЫ */
         .contact { padding: 120px 5%; background: var(--bg); }
@@ -187,7 +194,7 @@
         input:focus, textarea:focus { outline: none; border-bottom-color: var(--accent); }
         textarea { resize: none; height: 80px; }
 
-        footer { padding: 40px 5%; border-top: 1px solid var(--border); display: flex; justify-content: space-between; color: var(--text-muted); font-size: 0.9rem; }
+        footer { padding: 40px 5%; border-top: 1px solid var(--border); display: flex; justify-content: space-between; color: var(--text-muted); font-size: 0.9rem; max-width: 1200px; margin: 0 auto; }
 
         /* Анимации */
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
@@ -200,6 +207,7 @@
             .service-desc { display: none; }
             .features-grid { grid-template-columns: repeat(2, 1fr); }
             .contact-inner { grid-template-columns: 1fr; gap: 50px; }
+            .hero-stats { flex-wrap: wrap; gap: 30px; }
         }
         @media (max-width: 768px) {
             .hero h1 { font-size: 3rem; }
@@ -225,8 +233,24 @@
     <section class="hero" id="home">
         <div class="hero-content reveal">
             <h1>ТОЧНОСТЬ<br>В <span>МЕТАЛЛЕ</span></h1>
-            <p>Промышленная металлообработка и лазерная резка в СПб. Оборудование TRUMPF и BYSTRONIC. Работаем строго по чертежам.</p>
+            <p>Промышленная металлообработка и лазерная резка в СПб. Собственное производство. Работаем по чертежам любой сложности.</p>
             <a href="#contact" class="btn nav-link">Обсудить проект</a>
+        </div>
+
+        <!-- Плашка со статистикой -->
+        <div class="hero-stats reveal">
+            <div class="stat-item">
+                <div class="stat-num">10+</div>
+                <div class="stat-text">Лет на рынке</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">500+</div>
+                <div class="stat-text">Выполненных заказов</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">TRUMPF</div>
+                <div class="stat-text">Оборудование</div>
+            </div>
         </div>
     </section>
 
