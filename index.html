@@ -19,6 +19,7 @@
         }
         h1, h2, h3 { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
         a { text-decoration: none; color: inherit; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
         /* Хедер */
         header {
@@ -39,7 +40,7 @@
         }
         .btn-header:hover { background: #e55f00; transform: translateY(-2px); }
 
-        /* Главный экран */
+        /* Главный экран (Hero) */
         .hero {
             height: 100vh;
             display: flex;
@@ -49,18 +50,7 @@
             background: linear-gradient(135deg, rgba(13,13,13,0.95) 0%, rgba(13,13,13,0.7) 100%), 
                         url('https://images.unsplash.com/photo-1565514020179-026b92b84bb6?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
         }
-
-        .hero-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 50px;
-            align-items: center;
-            width: 100%;
-            z-index: 2;
-        }
-
+        .hero-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 50px; align-items: center; width: 100%; z-index: 2; }
         .hero-text { animation: fadeUp 1s ease-out; }
         .hero-text h1 { font-size: 4.5rem; line-height: 1.1; margin-bottom: 20px; }
         .hero-text h1 span { color: #FF6B00; }
@@ -75,44 +65,94 @@
         }
         .btn-main:hover { background: #e55f00; transform: translateY(-3px); }
 
-        /* Карточка с инфой (Стекло) */
         .hero-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 40px;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 12px;
             animation: fadeLeft 1s ease-out 0.3s both;
         }
         .hero-card h3 { font-size: 1.5rem; margin-bottom: 20px; color: #FF6B00; }
         .hero-card ul { list-style: none; }
-        .hero-card ul li {
-            margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-size: 1.05rem;
+        .hero-card ul li { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-size: 1.05rem; }
+        .hero-card ul li::before { content: '■'; color: #FF6B00; font-size: 0.8rem; }
+
+        /* Секция Услуги */
+        .services { padding: 100px 5%; background: #0d0d0d; }
+        .section-title { text-align: center; margin-bottom: 60px; }
+        .section-title h2 { font-size: 3rem; color: #fff; margin-bottom: 15px; }
+        .section-title h2 span { color: #FF6B00; }
+        .section-title p { color: #b0b0b0; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        
+        .grid-services { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .service-card {
+            background: #151515; padding: 40px 30px; border-radius: 8px;
+            border: 1px solid #222; transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
         }
-        .hero-card ul li::before {
-            content: '■'; color: #FF6B00; font-size: 0.8rem;
+        .service-card:hover { transform: translateY(-10px); border-color: #FF6B00; box-shadow: 0 15px 30px rgba(255, 107, 0, 0.1); }
+        .icon-box {
+            font-size: 2.5rem; margin-bottom: 20px; background: rgba(255, 107, 0, 0.1);
+            width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;
+            border-radius: 8px; color: #FF6B00;
         }
+        .service-card h3 { font-size: 1.4rem; margin-bottom: 15px; color: #fff; }
+        .service-card p { font-size: 0.95rem; color: #888; }
+
+        /* Секция Почему мы */
+        .why-us { padding: 100px 5%; background: #080808; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
+        .feature-item { text-align: center; }
+        .feature-icon { font-size: 3rem; color: #FF6B00; margin-bottom: 20px; }
+        .feature-item h3 { font-size: 1.3rem; margin-bottom: 15px; color: #fff; }
+        .feature-item p { color: #888; font-size: 0.95rem; }
+
+        /* Контакты и Форма */
+        .contact-section { padding: 100px 5%; background: #0d0d0d; }
+        .contact-container { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; max-width: 1200px; margin: 0 auto; }
+        
+        .contact-info h2 { font-size: 2.5rem; margin-bottom: 30px; }
+        .contact-info p { color: #b0b0b0; margin-bottom: 20px; font-size: 1.1rem; }
+        .contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; font-size: 1.2rem; }
+        .contact-item span { color: #FF6B00; font-size: 1.5rem; }
+
+        .contact-form { background: #151515; padding: 40px; border-radius: 8px; border: 1px solid #222; }
+        .contact-form h3 { font-size: 1.8rem; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 15px; background: #0d0d0d; border: 1px solid #333;
+            color: #fff; border-radius: 4px; font-family: 'Inter', sans-serif; font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #FF6B00; }
+        .form-group textarea { resize: vertical; height: 100px; }
+        .btn-submit {
+            width: 100%; background: #FF6B00; color: #fff; padding: 15px;
+            border: none; border-radius: 4px; font-size: 1.1rem; font-weight: 600;
+            text-transform: uppercase; cursor: pointer; transition: background 0.3s;
+        }
+        .btn-submit:hover { background: #e55f00; }
+
+        /* Футер */
+        footer { padding: 30px 5%; background: #050505; text-align: center; border-top: 1px solid #1a1a1a; }
+        footer p { color: #666; font-size: 0.9rem; margin-bottom: 10px; }
+        footer a { color: #888; text-decoration: underline; transition: color 0.3s; }
+        footer a:hover { color: #FF6B00; }
 
         /* Анимации */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeLeft {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeLeft { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
 
         /* Адаптив */
         @media (max-width: 992px) {
-            .hero-container { grid-template-columns: 1fr; text-align: center; }
+            .hero-container, .contact-container { grid-template-columns: 1fr; text-align: center; }
             .hero-text h1 { font-size: 3.5rem; }
             .hero-text p { margin: 0 auto 30px; }
-            .hero-card { display: none; } /* На телефоне карточку прячем, чтобы не мешала */
+            .hero-card { display: none; }
             .nav-links { display: none; }
+            .contact-info { text-align: center; }
+            .contact-item { justify-content: center; }
         }
         @media (max-width: 768px) {
             .hero-text h1 { font-size: 2.5rem; }
+            .contact-form { padding: 20px; }
         }
     </style>
 </head>
@@ -123,23 +163,20 @@
         <div class="logo">M<span>FACTURED</span></div>
         <div class="nav-links">
             <a href="#services">Услуги</a>
-            <a href="#about">О нас</a>
+            <a href="#why-us">О нас</a>
             <a href="#contact">Контакты</a>
         </div>
-        <button class="btn-header">Заказать расчет</button>
+        <a href="#contact" class="btn-header">Заказать расчет</a>
     </header>
 
     <!-- Главный экран -->
-    <section class="hero">
+    <section class="hero" id="home">
         <div class="hero-container">
-            <!-- Текстовая часть -->
             <div class="hero-text">
                 <h1>Высокоточная <span>металлообработка</span> в СПб</h1>
                 <p>Лазерная резка, фрезеровка, токарные работы и изготовление деталей по чертежам. Собственное производство с ЧПУ-станками TRUMPF и BYSTRONIC.</p>
                 <a href="#contact" class="btn-main">Рассчитать стоимость</a>
             </div>
-
-            <!-- Карточка со списком (стекло) -->
             <div class="hero-card">
                 <h3>Наши услуги</h3>
                 <ul>
@@ -153,5 +190,138 @@
         </div>
     </section>
 
+    <!-- Секция Услуги -->
+    <section class="services" id="services">
+        <div class="section-title">
+            <h2>Наши <span>услуги</span></h2>
+            <p>Полный цикл металлообработки и работы с различными материалами на современном оборудовании.</p>
+        </div>
+        <div class="grid-services">
+            <div class="service-card">
+                <div class="icon-box">⚙️</div>
+                <h3>Лазерная резка</h3>
+                <p>Высокоточная резка металла на станках ЧПУ. Работаем с черной и нержавеющей сталью, алюминием.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon-box">🛠️</div>
+                <h3>Токарные работы</h3>
+                <p>Изготовление деталей любой сложности по вашим чертежам. Высокая точность и соблюдение допусков.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon-box">🔥</div>
+                <h3>Фрезерная обработка</h3>
+                <p>Фрезеровка металла и других материалов. Создание пазов, отверстий и сложных геометрических форм.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon-box">🪵</div>
+                <h3>Резка фанеры и МДФ</h3>
+                <p>Лазерная резка дерева, МДФ, ХДФ и фанеры. Идеально для декора, мебели и рекламных конструкций.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon-box">💎</div>
+                <h3>Резка акрила и стекла</h3>
+                <p>Фигурная резка оргстекла, акрила и пластика. Кромка получается ровной и не требует доп. обработки.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon-box">🔤</div>
+                <h3>Буквы и таблички</h3>
+                <p>Изготовление объемных букв, вывесок и табличек из нержавеющей стали и других материалов.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция Почему мы -->
+    <section class="why-us" id="why-us">
+        <div class="section-title">
+            <h2>Почему <span>мы</span></h2>
+            <p>Наши преимущества, которые позволяют выполнять заказы в кратчайшие сроки.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-icon">🏭</div>
+                <h3>Собственное производство</h3>
+                <p>Современное оборудование от ведущих мировых производителей: TRUMPF, BYSTRONIC и др.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">⚡</div>
+                <h3>Минимальные сроки</h3>
+                <p>Благодаря налаженным процессам и ЧПУ-станкам выполняем заказы в кратчайшие сроки.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🛡️</div>
+                <h3>Гарантия качества</h3>
+                <p>Тщательный контроль на всех этапах производства. Гарантия на поставляемую продукцию.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🤝</div>
+                <h3>Индивидуальный подход</h3>
+                <p>Гибкая система оплаты и скидок. Работаем с юрлицами и ИП по договору.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция Контакты и Форма -->
+    <section class="contact-section" id="contact">
+        <div class="contact-container">
+            <div class="contact-info">
+                <h2>Оставить <span style="color:#FF6B00;">заявку</span></h2>
+                <p>Оставьте заявку на сайте, и мы в течение 1-2 рабочих дней рассчитаем точную стоимость заказа абсолютно бесплатно.</p>
+                <div class="contact-item">
+                    <span>📍</span> СПб, Придорожная аллея, 8
+                </div>
+                <div class="contact-item">
+                    <span>📞</span> 8 (812) 919-24-43
+                </div>
+                <div class="contact-item">
+                    <span>✉️</span> info@mfactured.ru
+                </div>
+                <div class="contact-item">
+                    <span>⏰</span> Пн-Пт с 09:00 до 20:00
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <h3>Заполните форму</h3>
+                <form id="orderForm">
+                    <div class="form-group">
+                        <input type="text" placeholder="Ваше имя" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" placeholder="Телефон" required>
+                    </div>
+                    <div class="form-group">
+                        <select required>
+                            <option value="" disabled selected>Выберите услугу</option>
+                            <option>Лазерная резка металла</option>
+                            <option>Резка фанеры / МДФ</option>
+                            <option>Резка акрила / стекла</option>
+                            <option>Токарные работы</option>
+                            <option>Фрезерная обработка</option>
+                            <option>Изготовление букв / табличек</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Опишите задачу или прикрепите ссылку на чертеж"></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">Отправить заявку</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer>
+        <p>&copy; 2024 MFACTURED. Металлообработка и производство в СПб.</p>
+        <p><a href="https://mfactured.ru/politika" target="_blank">Политика конфиденциальности</a></p>
+    </footer>
+
+    <!-- Скрипт для формы (чтобы показывало уведомление) -->
+    <script>
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Спасибо! Ваша заявка отправлена. Мы свяжемся с вами в ближайшее время.');
+            this.reset();
+        });
+    </script>
 </body>
 </html>
