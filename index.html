@@ -3,501 +3,399 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MFACTURED — Промышленная металлообработка в СПб</title>
+    <title>MFACTURED — Промышленная металлообработка</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Новые, дорогие шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;700;800&family=Syne:wght@600;800&display=swap" rel="stylesheet">
+    
     <style>
-        /* Базовые настройки (Цвета: Антрацит + Техно-синий) */
         :root {
-            --bg-dark: #121418; 
-            --bg-card: rgba(26, 29, 36, 0.7); /* Полупрозрачный для эффекта стекла */
-            --accent: #00d2ff; 
-            --accent-hover: #00a3c4;
-            --text-main: #f0f4f8;
-            --text-muted: #8b949e;
+            --bg: #080808;          /* Глубокий черный */
+            --surface: #111111;     /* Для блоков */
+            --text: #ffffff;
+            --text-muted: #888888;
+            --accent: #FF4D00;      /* Благородный оранжевый (раскаленный металл) */
+            --border: #222222;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            line-height: 1.6;
+            font-family: 'Manrope', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
-        h1, h2, h3 { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+
+        h1, h2, h3 { font-family: 'Syne', sans-serif; text-transform: uppercase; font-weight: 800; }
         a { text-decoration: none; color: inherit; }
 
-        /* Контейнер для 3D-частиц (на весь сайт) */
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1; 
-            pointer-events: none;
-        }
-
-        /* Хедер */
+        /* ХЕДЕР */
         header {
-            position: fixed; top: 0; width: 100%; padding: 20px 5%;
+            position: fixed; top: 0; width: 100%; padding: 25px 5%;
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(18, 20, 24, 0.8); backdrop-filter: blur(15px);
-            z-index: 1000; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(8, 8, 8, 0.8); backdrop-filter: blur(20px);
+            z-index: 1000; border-bottom: 1px solid var(--border);
         }
-        .logo { font-family: 'Oswald', sans-serif; font-size: 1.8rem; font-weight: 700; color: #fff; }
+        .logo { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; letter-spacing: 2px; }
         .logo span { color: var(--accent); }
-        .nav-links { display: flex; gap: 30px; }
-        .nav-links a { font-size: 0.9rem; font-weight: 600; transition: color 0.3s; color: var(--text-muted); }
-        .nav-links a:hover { color: var(--text-main); }
-        .btn-header {
-            background: var(--accent); color: #000; padding: 12px 25px;
-            font-weight: 700; border-radius: 4px; text-transform: uppercase; font-size: 0.85rem;
-            transition: all 0.3s; border: none; cursor: pointer;
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a { font-size: 0.9rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+        
+        .btn {
+            background: var(--accent); color: #000; padding: 15px 30px;
+            font-weight: 800; font-size: 0.9rem; text-transform: uppercase;
+            border: none; cursor: pointer; transition: all 0.3s;
+            border-radius: 2px; /* Острые углы, индустриальный стиль */
         }
-        .btn-header:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 210, 255, 0.3); }
+        .btn:hover { background: #fff; color: #000; }
 
-        /* Главный экран (Hero) */
+        /* ГЛАВНЫЙ ЭКРАН */
         .hero {
             height: 100vh;
             display: flex;
             align-items: center;
             padding: 0 5%;
             position: relative;
+        }
+
+        /* Контейнер для 3D станка */
+        #canvas-container {
+            position: absolute;
+            top: 0; right: 0;
+            width: 50%; height: 100%;
             z-index: 1;
         }
-        
-        .hero-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 50px; align-items: center; width: 100%; position: relative; }
-        .hero-text { animation: fadeUp 1s ease-out; }
-        .hero-text h1 { font-size: 4.5rem; line-height: 1.1; margin-bottom: 20px; text-shadow: 0 5px 15px rgba(0,0,0,0.8); }
-        .hero-text h1 span { color: var(--accent); }
-        .hero-text p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 40px; max-width: 600px; }
-        
-        .btn-main {
-            display: inline-block; background: var(--accent); color: #000;
-            padding: 18px 40px; font-size: 1.1rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 1px; border-radius: 4px;
-            transition: all 0.3s;
-            box-shadow: 0 10px 30px rgba(0, 210, 255, 0.2);
-        }
-        .btn-main:hover { background: var(--accent-hover); transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0, 210, 255, 0.4); }
 
-        .hero-card {
-            background: var(--bg-card); backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.08); padding: 40px; border-radius: 12px;
-            animation: fadeLeft 1s ease-out 0.3s both;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
         }
-        .hero-card h3 { font-size: 1.5rem; margin-bottom: 20px; color: #fff; }
-        .hero-card ul { list-style: none; }
-        .hero-card ul li { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-size: 1.05rem; color: var(--text-main); }
-        .hero-card ul li::before { content: '■'; color: var(--accent); font-size: 0.8rem; }
+        .hero h1 {
+            font-size: 6rem;
+            line-height: 0.95;
+            margin-bottom: 30px;
+        }
+        .hero h1 span {
+            -webkit-text-stroke: 1px var(--text); /* Контурный текст (треш-стиль) */
+            color: transparent;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 50px;
+            max-width: 500px;
+            font-weight: 300;
+        }
 
-        /* Секция Услуги */
-        .services { padding: 120px 5%; position: relative; z-index: 2; }
+        /* УСЛУГИ (Новый дизайн) */
+        .services { padding: 150px 5%; border-top: 1px solid var(--border); }
+        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 80px; }
+        .section-header h2 { font-size: 4rem; }
+        .section-header p { color: var(--text-muted); max-width: 400px; font-weight: 300; }
+
+        .services-list { border-top: 1px solid var(--border); }
         
-        .section-title { text-align: center; margin-bottom: 60px; }
-        .section-title h2 { font-size: 3rem; color: #fff; margin-bottom: 15px; }
-        .section-title h2 span { color: var(--accent); }
-        .section-title p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
-        
-        .grid-services { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
-            gap: 20px; 
-            max-width: 1200px; 
-            margin: 0 auto; 
-        }
-        
-        .service-card {
-            position: relative; 
-            background: var(--bg-card);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-            border-radius: 12px;
-            padding: 40px; 
-            height: 220px;
-            overflow: hidden; 
+        .service-row {
+            display: grid;
+            grid-template-columns: 100px 1fr 2fr 50px;
+            align-items: center;
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.4s ease;
             cursor: pointer;
-            transition: all 0.4s ease;
-            display: flex; 
-            flex-direction: column;
         }
         
-        .service-card:hover {
-            background: rgba(26, 29, 36, 0.9);
-            border-color: rgba(0, 210, 255, 0.3);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        /* Эффект при наведении на строку */
+        .service-row:hover {
+            background: var(--surface);
+            padding-left: 20px; /* Сдвиг вправо */
+            border-bottom-color: var(--accent);
         }
         
-        .icon-box {
-            font-size: 2rem; 
-            margin-bottom: 25px; 
-            background: rgba(0, 210, 255, 0.05);
-            width: 60px; 
-            height: 60px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            border-radius: 10px; 
-            color: var(--accent); 
-            transition: all 0.4s ease;
-            border: 1px solid rgba(0, 210, 255, 0.1);
-        }
+        .service-num { font-family: 'Syne', sans-serif; font-size: 1.5rem; color: var(--text-muted); }
+        .service-row:hover .service-num { color: var(--accent); }
         
-        .service-card:hover .icon-box { 
-            background: var(--accent); 
-            color: #000; 
-            transform: scale(1.05);
-        }
+        .service-title { font-size: 2rem; font-family: 'Syne', sans-serif; text-transform: uppercase; }
+        
+        .service-desc { color: var(--text-muted); font-size: 1rem; font-weight: 300; padding-right: 40px; }
+        
+        .service-icon { font-size: 1.5rem; transition: transform 0.3s; }
+        .service-row:hover .service-icon { transform: translateX(10px); color: var(--accent); }
 
-        .service-card h3 { font-size: 1.3rem; color: #fff; margin-bottom: 15px; }
-        
-        .service-desc {
-            color: var(--text-muted); 
-            font-size: 0.95rem; 
-            line-height: 1.5;
-            transition: color 0.4s ease;
-        }
-        .service-card:hover .service-desc { color: #ccc; }
-
-        /* Секция Почему мы */
-        .why-us { padding: 120px 5%; position: relative; z-index: 2; background: rgba(11, 12, 15, 0.9); }
-        
+        /* ПОЧЕМУ МЫ (Минимализм) */
+        .features { padding: 150px 5%; background: var(--surface); }
         .features-grid { 
             display: grid; 
-            grid-template-columns: repeat(4, 1fr);
-            gap: 30px; 
-            max-width: 1200px; 
-            margin: 0 auto; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 40px; 
+            margin-top: 60px;
         }
         
-        .feature-item {
-            padding: 30px; 
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 8px;
-            border-top: 2px solid rgba(0, 210, 255, 0.2);
-            transition: all 0.4s ease;
-            display: flex;
-            flex-direction: column;
-        }
+        .feature-block { border-top: 2px solid var(--border); padding-top: 30px; transition: border-color 0.3s; }
+        .feature-block:hover { border-top-color: var(--accent); }
         
-        .feature-item:hover { 
-            background: rgba(255, 255, 255, 0.04); 
-            border-top-color: var(--accent);
-            transform: translateY(-5px);
-        }
-        
-        .feature-number { 
-            font-family: 'Oswald', sans-serif; 
-            font-size: 2.5rem; 
-            color: var(--accent); 
-            opacity: 0.8; 
-            font-weight: 700; 
-            margin-bottom: 20px; 
-            line-height: 1; 
-        }
-        
-        .feature-item h3 { font-size: 1.2rem; margin-bottom: 15px; color: #fff; line-height: 1.3; }
-        .feature-item p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+        .feature-num { font-family: 'Syne', sans-serif; font-size: 3rem; font-weight: 800; margin-bottom: 20px; }
+        .feature-block h3 { font-size: 1.2rem; margin-bottom: 15px; font-family: 'Manrope', sans-serif; }
+        .feature-block p { color: var(--text-muted); font-size: 0.9rem; font-weight: 300; }
 
-        /* Контакты и Форма */
-        .contact-section { padding: 120px 5%; position: relative; z-index: 2; }
-        .contact-container { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; max-width: 1200px; margin: 0 auto; }
+        /* КОНТАКТЫ */
+        .contact { padding: 150px 5%; }
+        .contact-container { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; }
         
-        .contact-info h2 { font-size: 2.5rem; margin-bottom: 30px; color: #fff; }
-        .contact-info p { color: var(--text-muted); margin-bottom: 30px; font-size: 1.1rem; }
-        .contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; font-size: 1.1rem; color: var(--text-main); }
-        .contact-item span { color: var(--accent); font-size: 1.5rem; }
-
-        .contact-form { background: var(--bg-card); backdrop-filter: blur(10px); padding: 50px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .contact-form h3 { font-size: 1.8rem; margin-bottom: 30px; color: #fff; }
-        .form-group { margin-bottom: 20px; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 16px; background: rgba(0,0,0,0.5); border: 1px solid #333;
-            color: #fff; border-radius: 4px; font-family: 'Inter', sans-serif; font-size: 1rem; transition: border-color 0.3s;
-        }
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
-        .form-group textarea { resize: vertical; height: 120px; }
+        .contact h2 { font-size: 4rem; margin-bottom: 40px; }
+        .contact-info p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 40px; max-width: 400px; }
         
-        .btn-submit {
-            width: 100%; background: var(--accent); color: #000; padding: 18px;
-            border: none; border-radius: 4px; font-size: 1.1rem; font-weight: 700;
-            text-transform: uppercase; cursor: pointer; transition: all 0.3s; letter-spacing: 1px;
-        }
-        .btn-submit:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 210, 255, 0.3); }
+        .info-line { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; font-size: 1.2rem; }
+        .info-line span { color: var(--accent); font-size: 1.5rem; }
 
-        /* Футер */
-        footer { padding: 40px 5%; background: rgba(5, 6, 8, 0.9); text-align: center; border-top: 1px solid #1a1a1a; position: relative; z-index: 2; }
-        footer p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px; }
-        footer a { color: var(--text-main); text-decoration: underline; transition: color 0.3s; }
+        form { display: flex; flex-direction: column; gap: 20px; }
+        input, select, textarea {
+            width: 100%; padding: 20px; background: var(--surface); border: 1px solid var(--border);
+            color: #fff; font-family: 'Manrope', sans-serif; font-size: 1rem; transition: border-color 0.3s;
+            border-radius: 2px;
+        }
+        input:focus, textarea:focus { outline: none; border-color: var(--accent); }
+        textarea { resize: none; height: 120px; }
+        
+        /* ФУТЕР */
+        footer { padding: 40px 5%; border-top: 1px solid var(--border); display: flex; justify-content: space-between; color: var(--text-muted); font-size: 0.9rem; }
+        footer a { transition: color 0.3s; }
         footer a:hover { color: var(--accent); }
 
-        /* Анимации появления */
-        .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        /* Анимации */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeLeft { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
-
-        /* Адаптив */
         @media (max-width: 992px) {
-            .hero-container, .contact-container { grid-template-columns: 1fr; text-align: center; }
-            .hero-text h1 { font-size: 3.5rem; }
-            .hero-text p { margin: 0 auto 30px; }
-            .hero-card { display: none; }
+            .hero h1 { font-size: 4rem; }
+            #canvas-container { opacity: 0.3; width: 100%; }
             .nav-links { display: none; }
-            .contact-info { text-align: center; }
-            .contact-item { justify-content: center; }
+            .service-row { grid-template-columns: 50px 1fr; gap: 20px; }
+            .service-desc { display: none; }
             .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .contact-container { grid-template-columns: 1fr; gap: 50px; }
         }
         @media (max-width: 768px) {
-            .hero-text h1 { font-size: 2.5rem; }
-            .contact-form { padding: 30px 20px; }
-            .services, .why-us, .contact-section { padding: 60px 5%; }
-            .grid-services, .features-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.8rem; }
+            .section-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+            .features-grid { grid-template-columns: 1fr; }
+            footer { flex-direction: column; gap: 20px; text-align: center; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 3D-частицы на фоне -->
-    <div id="canvas-container"></div>
-
-    <!-- Хедер -->
     <header>
         <div class="logo">M<span>FACTURED</span></div>
         <div class="nav-links">
             <a href="#services">Услуги</a>
-            <a href="#why-us">О нас</a>
+            <a href="#why">О нас</a>
             <a href="#contact">Контакты</a>
         </div>
-        <a href="#contact" class="btn-header">Заказать расчет</a>
+        <a href="#contact" class="btn">Заказать расчет</a>
     </header>
 
-    <!-- Главный экран -->
-    <section class="hero" id="home">
-        <div class="hero-container">
-            <div class="hero-text">
-                <h1>Высокоточная <span>металлообработка</span> в СПб</h1>
-                <p>Лазерная резка, фрезеровка, токарные работы и изготовление деталей по чертежам. Собственное производство с ЧПУ-станками TRUMPF и BYSTRONIC.</p>
-                <a href="#contact" class="btn-main">Рассчитать стоимость</a>
-            </div>
-            <div class="hero-card">
-                <h3>Наши услуги</h3>
-                <ul>
-                    <li>Лазерная резка и гравировка</li>
-                    <li>Токарные и фрезерные работы</li>
-                    <li>Металлообработка и гибка</li>
-                    <li>Резка фанеры, МДФ, акрила</li>
-                    <li>Изготовление термопанелей</li>
-                </ul>
-            </div>
+    <!-- ГЛАВНЫЙ ЭКРАН (С 3D) -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>ТОЧНОСТЬ<br>В <span>МЕТАЛЛЕ</span></h1>
+            <p>Промышленная металлообработка и лазерная резка в СПб. Оборудование TRUMPF и BYSTRONIC. Работаем по чертежам.</p>
+            <a href="#contact" class="btn">Обсудить проект</a>
         </div>
+        <!-- Сюда рендерится 3D -->
+        <div id="canvas-container"></div>
     </section>
 
-    <!-- Секция Услуги -->
+    <!-- УСЛУГИ (В стиле списка) -->
     <section class="services" id="services">
-        <div class="section-title reveal">
-            <h2>Наши <span>услуги</span></h2>
-            <p>Полный цикл металлообработки и работы с различными материалами на современном оборудовании.</p>
+        <div class="section-header reveal">
+            <h2>УСЛУГИ</h2>
+            <p>Полный цикл металлообработки. От единичных деталей до серийного производства.</p>
         </div>
-        <div class="grid-services">
-            <div class="service-card reveal">
-                <div class="icon-box">⚙️</div>
-                <h3>Лазерная резка</h3>
-                <div class="service-desc">Высокоточная резка металла на станках ЧПУ. Работаем с черной и нержавеющей сталью, алюминием.</div>
+        
+        <div class="services-list">
+            <div class="service-row reveal">
+                <div class="service-num">01</div>
+                <div class="service-title">Лазерная резка</div>
+                <div class="service-desc">Высокоточная резка металла на станках ЧПУ. Черная и нержавеющая сталь, алюминий.</div>
+                <div class="service-icon">↗</div>
             </div>
-            <div class="service-card reveal">
-                <div class="icon-box">🛠️</div>
-                <h3>Токарные работы</h3>
-                <div class="service-desc">Изготовление деталей любой сложности по вашим чертежам. Высокая точность и соблюдение допусков.</div>
+            <div class="service-row reveal">
+                <div class="service-num">02</div>
+                <div class="service-title">Токарные работы</div>
+                <div class="service-desc">Изготовление деталей любой сложности по вашим чертежам. Соблюдение допусков.</div>
+                <div class="service-icon">↗</div>
             </div>
-            <div class="service-card reveal">
-                <div class="icon-box">🔥</div>
-                <h3>Фрезерная обработка</h3>
-                <div class="service-desc">Фрезеровка металла и других материалов. Создание пазов, отверстий и сложных геометрических форм.</div>
+            <div class="service-row reveal">
+                <div class="service-num">03</div>
+                <div class="service-title">Фрезеровка</div>
+                <div class="service-desc">Фрезеровка металла и других материалов. Создание пазов, отверстий, сложных форм.</div>
+                <div class="service-icon">↗</div>
             </div>
-            <div class="service-card reveal">
-                <div class="icon-box">🪵</div>
-                <h3>Резка фанеры и МДФ</h3>
-                <div class="service-desc">Лазерная резка дерева, МДФ, ХДФ и фанеры. Идеально для декора, мебели и рекламных конструкций.</div>
+            <div class="service-row reveal">
+                <div class="service-num">04</div>
+                <div class="service-title">Резка фанеры и МДФ</div>
+                <div class="service-desc">Лазерная резка дерева, МДФ, ХДФ. Идеально для декора и рекламных конструкций.</div>
+                <div class="service-icon">↗</div>
             </div>
-            <div class="service-card reveal">
-                <div class="icon-box">💎</div>
-                <h3>Резка акрила и стекла</h3>
-                <div class="service-desc">Фигурная резка оргстекла, акрила и пластика. Кромка получается ровной и не требует доп. обработки.</div>
-            </div>
-            <div class="service-card reveal">
-                <div class="icon-box">🔤</div>
-                <h3>Буквы и таблички</h3>
-                <div class="service-desc">Изготовление объемных букв, вывесок и табличек из нержавеющей стали и других материалов.</div>
+            <div class="service-row reveal">
+                <div class="service-num">05</div>
+                <div class="service-title">Резка акрила</div>
+                <div class="service-desc">Фигурная резка оргстекла и пластика. Кромка получается ровной, без доп. обработки.</div>
+                <div class="service-icon">↗</div>
             </div>
         </div>
     </section>
 
-    <!-- Секция Почему мы -->
-    <section class="why-us" id="why-us">
-        <div class="section-title reveal">
-            <h2>Почему <span>мы</span></h2>
-            <p>Наши преимущества, которые позволяют выполнять заказы в кратчайшие сроки.</p>
+    <!-- ПОЧЕМУ МЫ -->
+    <section class="features" id="why">
+        <div class="section-header reveal">
+            <h2>ПОЧЕМУ МЫ</h2>
+            <p>Мы не просто выполняем заказы. Мы решаем задачи вашего производства.</p>
         </div>
         <div class="features-grid">
-            <div class="feature-item reveal">
-                <div class="feature-number">01</div>
+            <div class="feature-block reveal">
+                <div class="feature-num">01</div>
                 <h3>Собственное производство</h3>
-                <p>Современное оборудование от ведущих мировых производителей: TRUMPF, BYSTRONIC и др.</p>
+                <p>Оборудование от ведущих мировых брендов: TRUMPF, BYSTRONIC.</p>
             </div>
-            <div class="feature-item reveal">
-                <div class="feature-number">02</div>
-                <h3>Минимальные сроки</h3>
-                <p>Благодаря налаженным процессам и ЧПУ-станкам выполняем заказы в кратчайшие сроки.</p>
+            <div class="feature-block reveal">
+                <div class="feature-num">02</div>
+                <h3>Скорость</h3>
+                <p>Налаженные процессы и ЧПУ-станки позволяют работать в кратчайшие сроки.</p>
             </div>
-            <div class="feature-item reveal">
-                <div class="feature-number">03</div>
-                <h3>Гарантия качества</h3>
-                <p>Тщательный контроль на всех этапах производства. Гарантия на поставляемую продукцию.</p>
+            <div class="feature-block reveal">
+                <div class="feature-num">03</div>
+                <h3>Гарантия</h3>
+                <p>Контроль на всех этапах. Гарантия на каждую деталь.</p>
             </div>
-            <div class="feature-item reveal">
-                <div class="feature-number">04</div>
-                <h3>Индивидуальный подход</h3>
-                <p>Гибкая система оплаты и скидок. Работаем с юрлицами и ИП по договору.</p>
+            <div class="feature-block reveal">
+                <div class="feature-num">04</div>
+                <h3>Договор</h3>
+                <p>Работаем с юрлицами и ИП. Гибкая система оплаты и скидок.</p>
             </div>
         </div>
     </section>
 
-    <!-- Секция Контакты и Форма -->
-    <section class="contact-section" id="contact">
+    <!-- КОНТАКТЫ -->
+    <section class="contact" id="contact">
         <div class="contact-container">
             <div class="contact-info reveal">
-                <h2>Оставить <span style="color:var(--accent);">заявку</span></h2>
-                <p>Оставьте заявку, и мы в течение 1-2 рабочих дней рассчитаем точную стоимость вашего заказа абсолютно бесплатно.</p>
-                <div class="contact-item"><span>📍</span> СПб, Придорожная аллея, 8</div>
-                <div class="contact-item"><span>📞</span> 8 (812) 919-24-43</div>
-                <div class="contact-item"><span>✉️</span> info@mfactured.ru</div>
-                <div class="contact-item"><span>⏰</span> Пн-Пт с 09:00 до 20:00</div>
+                <h2>ОСТАВИТЬ<br>ЗАЯВКУ</h2>
+                <p>Оставьте заявку, и мы в течение 1-2 рабочих дней рассчитаем точную стоимость вашего заказа.</p>
+                <div class="info-line"><span>📍</span> СПб, Придорожная аллея, 8</div>
+                <div class="info-line"><span>📞</span> 8 (812) 919-24-43</div>
+                <div class="info-line"><span>✉️</span> info@mfactured.ru</div>
             </div>
 
-            <div class="contact-form reveal">
-                <h3>Заполните форму</h3>
+            <div class="reveal">
                 <form id="orderForm">
-                    <div class="form-group"><input type="text" placeholder="Ваше имя" required></div>
-                    <div class="form-group"><input type="tel" placeholder="Телефон" required></div>
-                    <div class="form-group">
-                        <select required>
-                            <option value="" disabled selected>Выберите услугу</option>
-                            <option>Лазерная резка металла</option>
-                            <option>Резка фанеры / МДФ</option>
-                            <option>Резка акрила / стекла</option>
-                            <option>Токарные работы</option>
-                            <option>Фрезерная обработка</option>
-                            <option>Изготовление букв / табличек</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><textarea placeholder="Опишите задачу или прикрепите ссылку на чертеж"></textarea></div>
-                    <button type="submit" class="btn-submit">Отправить заявку</button>
+                    <input type="text" placeholder="Ваше имя" required>
+                    <input type="tel" placeholder="Телефон" required>
+                    <select required>
+                        <option value="" disabled selected>Выберите услугу</option>
+                        <option>Лазерная резка</option>
+                        <option>Токарные работы</option>
+                        <option>Фрезеровка</option>
+                        <option>Резка фанеры / МДФ</option>
+                    </select>
+                    <textarea placeholder="Опишите задачу или чертеж"></textarea>
+                    <button type="submit" class="btn">Отправить</button>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- Футер -->
     <footer>
-        <p>&copy; 2024 MFACTURED. Металлообработка и производство в СПб.</p>
-        <p><a href="https://mfactured.ru/politika" target="_blank">Политика конфиденциальности</a></p>
+        <div>&copy; 2024 MFACTURED.</div>
+        <div><a href="privacy.html">Политика конфиденциальности</a></div>
     </footer>
 
-    <!-- Скрипт формы -->
+    <!-- ФОРМА -->
     <script>
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Спасибо! Ваша заявка отправлена. Мы свяжемся с вами в ближайшее время.');
+            alert('Заявка отправлена!');
             this.reset();
         });
     </script>
 
-    <!-- Скрипт 3D-частиц (Three.js) -->
+    <!-- 3D ВРАЩАЮЩАЯСЯ ДЕТАЛЬ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 5;
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.set(0, 0, 8);
 
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
         container.appendChild(renderer.domElement);
 
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = 800; 
-        const posArray = new Float32Array(particlesCount * 3);
-        
-        for(let i = 0; i < particlesCount * 3; i++) {
-            posArray[i] = (Math.random() - 0.5) * 25;
-        }
-        
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        
-        const particlesMaterial = new THREE.PointsMaterial({
-            size: 0.04,
-            color: 0x00d2ff,
-            transparent: true,
-            opacity: 0.5,
-            blending: THREE.AdditiveBlending
-        });
-        
-        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particlesMesh);
+        // Свет
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        const pointLight = new THREE.PointLight(0xFF4D00, 2); // Оранжевый свет
+        pointLight.position.set(5, 5, 5);
+        scene.add(pointLight);
 
+        // 3D-деталь (сложная форма)
+        const geometry = new THREE.TorusKnotGeometry(2, 0.5, 128, 32);
+        const material = new THREE.MeshStandardMaterial({ 
+            color: 0x222222, 
+            metalness: 0.9, 
+            roughness: 0.2,
+            emissive: 0x110000 
+        });
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        // Анимация
         let mouseX = 0;
         let mouseY = 0;
-
-        document.addEventListener('mousemove', (event) => {
-            mouseX = event.clientX / window.innerWidth - 0.5;
-            mouseY = event.clientY / window.innerHeight - 0.5;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
         });
-
-        const clock = new THREE.Clock();
 
         function animate() {
             requestAnimationFrame(animate);
-            const elapsedTime = clock.getElapsedTime();
-
-            particlesMesh.rotation.y = elapsedTime * 0.03 + mouseX * 0.3;
-            particlesMesh.rotation.x = mouseY * 0.3;
+            mesh.rotation.x += 0.005;
+            mesh.rotation.y += 0.005;
+            
+            // Плавное следование за мышью
+            mesh.position.x += (mouseX * 1 - mesh.position.x) * 0.05;
+            mesh.position.y += (mouseY * 1 - mesh.position.y) * 0.05;
 
             renderer.render(scene, camera);
         }
         animate();
 
         window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.aspect = container.clientWidth / container.clientHeight;
             camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setSize(container.clientWidth, container.clientHeight);
         });
     </script>
 
-    <!-- Скрипт анимации при скролле -->
+    <!-- Скролл Анимации -->
     <script>
         const reveals = document.querySelectorAll('.reveal');
-
         const revealOnScroll = () => {
             const windowHeight = window.innerHeight;
-            const elementVisible = 100;
-
             reveals.forEach((reveal) => {
-                const elementTop = reveal.getBoundingClientRect().top;
-                if (elementTop < windowHeight - elementVisible) {
+                if (reveal.getBoundingClientRect().top < windowHeight - 100) {
                     reveal.classList.add('active');
                 }
             });
         };
-
         window.addEventListener('scroll', revealOnScroll);
         revealOnScroll();
     </script>
