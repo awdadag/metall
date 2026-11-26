@@ -74,11 +74,12 @@
         .section-header {
             display: flex; justify-content: space-between; align-items: flex-end;
             margin-bottom: 80px; border-bottom: 1px solid var(--border); padding-bottom: 30px;
+            max-width: 1200px; margin-left: auto; margin-right: auto;
         }
         .section-header h2 { font-size: 3.5rem; }
         .section-header p { color: var(--text-muted); max-width: 400px; font-size: 1rem; }
 
-        .services-list { border-top: 1px solid var(--border); }
+        .services-list { border-top: 1px solid var(--border); max-width: 1200px; margin: 0 auto; }
 
         .service-row {
             display: grid;
@@ -105,18 +106,23 @@
         .service-arrow { font-size: 1.5rem; color: var(--accent); transition: transform 0.3s; }
         .service-row:hover .service-arrow { transform: translateX(10px); }
 
-        /* СЕКЦИЯ ПРЕИМУЩЕСТВ (Светлая) */
+        /* СЕКЦИЯ ПРЕИМУЩЕСТВ (Исправленный блок) */
         .features { 
             padding: 120px 5%; 
-            background: #f4f4f4; 
-            color: #111; 
+            background: var(--surface); 
+            color: var(--text); 
             border-top: 1px solid var(--border); 
             border-bottom: 1px solid var(--border); 
         }
         
-        .features .section-header { border-bottom-color: #ccc; }
-        .features .section-header h2 { color: #111; }
-        .features .section-header p { color: #666; }
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features .section-header { border-bottom-color: var(--border); max-width: 100%; }
+        .features .section-header h2 { color: #fff; }
+        .features .section-header p { color: var(--text-muted); }
 
         .features-grid {
             display: grid;
@@ -126,7 +132,7 @@
         }
 
         .feature-item { 
-            border-left: 2px solid #ccc; 
+            border-left: 2px solid var(--border); 
             padding-left: 20px; 
             transition: border-color 0.3s; 
         }
@@ -135,25 +141,32 @@
         .feature-num { 
             font-family: 'Oswald', sans-serif; 
             font-size: 2.5rem; 
-            color: #111; 
+            color: var(--accent); 
             margin-bottom: 15px; 
         }
         .feature-item h3 { 
             font-size: 1.1rem; 
             margin-bottom: 10px; 
-            color: #111; 
+            color: #fff; 
             letter-spacing: 0; 
             font-family: 'Inter', sans-serif; 
             font-weight: 600; 
         }
         .feature-item p { 
-            color: #666; 
+            color: var(--text-muted); 
             font-size: 0.9rem; 
         }
 
         /* КОНТАКТЫ */
         .contact { padding: 120px 5%; background: var(--bg); }
-        .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+        
+        .contact-inner { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 80px; 
+        }
         
         .contact-info h2 { font-size: 3.5rem; margin-bottom: 30px; }
         .contact-info p { color: var(--text-muted); margin-bottom: 40px; }
@@ -260,30 +273,32 @@
 
     <!-- ПОЧЕМУ МЫ -->
     <section class="features" id="why">
-        <div class="section-header reveal">
-            <h2>ПОЧЕМУ МЫ</h2>
-            <p>Мы не просто выполняем заказы. Мы решаем задачи вашего производства.</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-item reveal">
-                <div class="feature-num">01</div>
-                <h3>Собственное производство</h3>
-                <p>Оборудование от ведущих мировых брендов: TRUMPF, BYSTRONIC.</p>
+        <div class="features-container">
+            <div class="section-header reveal">
+                <h2>ПОЧЕМУ МЫ</h2>
+                <p>Мы не просто выполняем заказы. Мы решаем задачи вашего производства.</p>
             </div>
-            <div class="feature-item reveal">
-                <div class="feature-num">02</div>
-                <h3>Скорость</h3>
-                <p>Налаженные процессы и ЧПУ-станки позволяют работать в кратчайшие сроки.</p>
-            </div>
-            <div class="feature-item reveal">
-                <div class="feature-num">03</div>
-                <h3>Гарантия</h3>
-                <p>Контроль на всех этапах. Гарантия на каждую деталь.</p>
-            </div>
-            <div class="feature-item reveal">
-                <div class="feature-num">04</div>
-                <h3>Договор</h3>
-                <p>Работаем с юрлицами и ИП. Гибкая система оплаты и скидок.</p>
+            <div class="features-grid">
+                <div class="feature-item reveal">
+                    <div class="feature-num">01</div>
+                    <h3>Собственное производство</h3>
+                    <p>Оборудование от ведущих мировых брендов: TRUMPF, BYSTRONIC.</p>
+                </div>
+                <div class="feature-item reveal">
+                    <div class="feature-num">02</div>
+                    <h3>Скорость</h3>
+                    <p>Налаженные процессы и ЧПУ-станки позволяют работать в кратчайшие сроки.</p>
+                </div>
+                <div class="feature-item reveal">
+                    <div class="feature-num">03</div>
+                    <h3>Гарантия</h3>
+                    <p>Контроль на всех этапах. Гарантия на каждую деталь.</p>
+                </div>
+                <div class="feature-item reveal">
+                    <div class="feature-num">04</div>
+                    <h3>Договор</h3>
+                    <p>Работаем с юрлицами и ИП. Гибкая система оплаты и скидок.</p>
+                </div>
             </div>
         </div>
     </section>
