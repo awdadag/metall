@@ -6,7 +6,6 @@
     <title>MFACTURED — Промышленная металлообработка</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Строгие, дорогие шрифты -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
@@ -15,7 +14,7 @@
             --surface: #0d0d0d;     
             --text: #ffffff;
             --text-muted: #777777;
-            --accent: #FF4D00;      /* Оранжевый */
+            --accent: #FF4D00;      
             --border: #1f1f1f;
         }
 
@@ -27,14 +26,13 @@
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
-            scroll-behavior: smooth;
-            -webkit-font-smoothing: antialiased;
+            scroll-behavior: smooth; /* Плавный скролл на всякий случай */
         }
 
         h1, h2, h3 { font-family: 'Oswald', sans-serif; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
         a { text-decoration: none; color: inherit; }
 
-        /* ХЕДЕР (Строгий, без капсул) */
+        /* ХЕДЕР */
         header {
             position: fixed; top: 0; width: 100%; padding: 25px 5%;
             display: flex; justify-content: space-between; align-items: center;
@@ -44,18 +42,19 @@
         .logo { font-family: 'Oswald', sans-serif; font-size: 1.6rem; font-weight: 700; letter-spacing: 2px; }
         .logo span { color: var(--accent); }
         .nav-links { display: flex; gap: 40px; }
-        .nav-links a { font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s; color: var(--text-muted); }
+        .nav-links a { font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s; color: var(--text-muted); cursor: pointer; }
         .nav-links a:hover { color: var(--text); }
         
         .btn {
             background: var(--accent); color: #fff; padding: 15px 30px;
             font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;
             border: none; cursor: pointer; transition: background 0.3s;
-            border-radius: 0px; /* Острые углы! */
+            border-radius: 0px;
+            display: inline-block;
         }
         .btn:hover { background: #e64500; }
 
-        /* ГЛАВНЫЙ ЭКРАН (Hero) */
+        /* ГЛАВНЫЙ ЭКРАН */
         .hero {
             height: 100vh;
             display: flex; flex-direction: column; justify-content: center;
@@ -66,22 +65,13 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .hero-content {
-            position: relative; z-index: 2; max-width: 800px;
-            margin-top: 50px;
-        }
+        .hero-content { position: relative; z-index: 2; max-width: 800px; margin-top: 50px; }
 
-        .hero h1 {
-            font-size: 7.5rem; line-height: 0.9; margin-bottom: 30px;
-            color: #fff;
-        }
+        .hero h1 { font-size: 7.5rem; line-height: 0.9; margin-bottom: 30px; color: #fff; }
         .hero h1 span { color: var(--accent); }
+        .hero p { font-size: 1.2rem; color: #aaa; margin-bottom: 50px; max-width: 500px; }
 
-        .hero p {
-            font-size: 1.2rem; color: #aaa; margin-bottom: 50px; max-width: 500px;
-        }
-
-        /* СЕКЦИЯ УСЛУГ (Строгая сетка без карточек) */
+        /* СЕКЦИЯ УСЛУГ */
         .services { padding: 120px 5%; background: var(--bg); }
         
         .section-header {
@@ -109,22 +99,13 @@
             border-bottom-color: var(--accent);
         }
 
-        .service-num {
-            font-family: 'Oswald', sans-serif; font-size: 1.2rem; color: var(--text-muted);
-        }
+        .service-num { font-family: 'Oswald', sans-serif; font-size: 1.2rem; color: var(--text-muted); }
         .service-row:hover .service-num { color: var(--accent); }
 
-        .service-title {
-            font-family: 'Oswald', sans-serif; font-size: 2rem; text-transform: uppercase; color: #fff;
-        }
-
-        .service-desc {
-            color: var(--text-muted); font-size: 1rem; padding-right: 40px;
-        }
-
-        .service-arrow {
-            font-size: 1.5rem; color: var(--accent); transition: transform 0.3s;
-        }
+        .service-title { font-family: 'Oswald', sans-serif; font-size: 2rem; text-transform: uppercase; color: #fff; }
+        .service-desc { color: var(--text-muted); font-size: 1rem; padding-right: 40px; }
+        
+        .service-arrow { font-size: 1.5rem; color: var(--accent); transition: transform 0.3s; }
         .service-row:hover .service-arrow { transform: translateX(10px); }
 
         /* СЕКЦИЯ ПРЕИМУЩЕСТВ */
@@ -137,16 +118,11 @@
             margin-top: 60px;
         }
 
-        .feature-item {
-            border-left: 2px solid var(--border); padding-left: 20px;
-            transition: border-color 0.3s;
-        }
+        .feature-item { border-left: 2px solid var(--border); padding-left: 20px; transition: border-color 0.3s; }
         .feature-item:hover { border-left-color: var(--accent); }
 
-        .feature-num {
-            font-family: 'Oswald', sans-serif; font-size: 2.5rem; color: #fff; margin-bottom: 15px;
-        }
-        .feature-item h3 { font-size: 1.1rem; margin-bottom: 10px; color: #fff; letter-spacing: 0; }
+        .feature-num { font-family: 'Oswald', sans-serif; font-size: 2.5rem; color: #fff; margin-bottom: 15px; }
+        .feature-item h3 { font-size: 1.1rem; margin-bottom: 10px; color: #fff; letter-spacing: 0; font-family: 'Inter', sans-serif; font-weight: 600; }
         .feature-item p { color: var(--text-muted); font-size: 0.9rem; }
 
         /* КОНТАКТЫ */
@@ -199,23 +175,24 @@
     <header>
         <div class="logo">M<span>FACTURED</span></div>
         <div class="nav-links">
-            <a href="#services">Услуги</a>
-            <a href="#why">О нас</a>
-            <a href="#contact">Контакты</a>
+            <!-- Добавил классы для плавного скролла -->
+            <a href="#services" class="nav-link">Услуги</a>
+            <a href="#why" class="nav-link">О нас</a>
+            <a href="#contact" class="nav-link">Контакты</a>
         </div>
-        <a href="#contact" class="btn">Заказать расчет</a>
+        <a href="#contact" class="btn nav-link">Заказать расчет</a>
     </header>
 
     <!-- ГЛАВНЫЙ ЭКРАН -->
-    <section class="hero">
+    <section class="hero" id="home">
         <div class="hero-content reveal">
             <h1>ТОЧНОСТЬ<br>В <span>МЕТАЛЛЕ</span></h1>
             <p>Промышленная металлообработка и лазерная резка в СПб. Оборудование TRUMPF и BYSTRONIC. Работаем строго по чертежам.</p>
-            <a href="#contact" class="btn">Обсудить проект</a>
+            <a href="#contact" class="btn nav-link">Обсудить проект</a>
         </div>
     </section>
 
-    <!-- УСЛУГИ (Строгий список) -->
+    <!-- УСЛУГИ -->
     <section class="services" id="services">
         <div class="section-header reveal">
             <h2>УСЛУГИ</h2>
@@ -332,13 +309,16 @@
         <div><a href="privacy.html" style="color:var(--text-muted); text-decoration:underline;">Политика конфиденциальности</a></div>
     </footer>
 
+    <!-- Скрипты -->
     <script>
+        // 1. Отправка формы
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
             alert('Заявка отправлена! Мы свяжемся с вами.');
             this.reset();
         });
 
+        // 2. Анимация появления при скролле
         const reveals = document.querySelectorAll('.reveal');
         const revealOnScroll = () => {
             const windowHeight = window.innerHeight;
@@ -350,6 +330,27 @@
         };
         window.addEventListener('scroll', revealOnScroll);
         revealOnScroll();
+
+        // 3. Плавный скролл для меню
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault(); 
+
+                const targetId = this.getAttribute('href'); 
+                const targetElement = document.querySelector(targetId); 
+
+                if (targetElement) {
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 20; 
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth" 
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
