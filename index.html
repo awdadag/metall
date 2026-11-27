@@ -52,7 +52,7 @@
         }
         .btn:hover { background: #e64500; }
 
-        /* ГЛАВНЫЙ ЭКРАН */
+        /* ГЛАВНЫЙ ЭКРАН С 3D */
         .hero {
             height: 100vh;
             display: flex; flex-direction: column; justify-content: center;
@@ -73,12 +73,12 @@
             z-index: 1;
         }
 
-        /* Градиент для контраста */
+        /* Градиент для контраста (закрывает левую часть, чтобы текст читался) */
         .hero::before {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(90deg, rgba(5,5,5,1) 0%, rgba(5,5,5,0.8) 50%, rgba(5,5,5,0.1) 100%);
+            background: linear-gradient(90deg, rgba(5,5,5,1) 0%, rgba(5,5,5,0.9) 30%, rgba(5,5,5,0.1) 100%);
             z-index: 2;
             pointer-events: none;
         }
@@ -214,7 +214,7 @@
             .features-grid { grid-template-columns: repeat(2, 1fr); }
             .contact-inner { grid-template-columns: 1fr; gap: 50px; }
             .hero-stats { flex-wrap: wrap; gap: 30px; }
-            #canvas-container { width: 100%; opacity: 0.3; } /* На мобилках 3D на фоне */
+            #canvas-container { width: 100%; opacity: 0.2; } 
         }
         @media (max-width: 768px) {
             .hero h1 { font-size: 3rem; }
@@ -423,7 +423,6 @@
         const loader = new THREE.GLTFLoader();
         let model;
 
-        // ⚠️ УБЕДИСЬ, ЧТО ФАЙЛ НАЗЫВАЕТСЯ ИМЕННО ТАК
         loader.load('cnc-machine.glb', function (gltf) {
             model = gltf.scene;
             
@@ -434,7 +433,6 @@
             model.position.y += (model.position.y - center.y);
             model.position.z += (model.position.z - center.z);
 
-            // Масштаб (если станок слишком маленький/большой, поменяй цифры)
             model.scale.set(1, 1, 1); 
 
             scene.add(model);
@@ -442,22 +440,35 @@
             console.error('Ошибка загрузки 3D:', error);
         });
 
-        // Анимация
+        // Анимация от мыши и скролла
         let mouseX = 0;
         let mouseY = 0;
+        let targetRotationY = 0;
+        let targetRotationX = 0;
+        let scrollY = 0;
+
         document.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX / window.innerWidth) * 2 - 1;
             mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+            targetRotationY = mouseX * 0.5;
+            targetRotationX = mouseY * 0.2;
         });
 
-        const clock = new THREE.Clock();
+        window.addEventListener('scroll', () => {
+            scrollY = window.scrollY;
+            // Параллакс для текста
+            const heroContent = document.querySelector('.hero-content');
+            const heroStats = document.querySelector('.hero-stats');
+            if (heroContent) heroContent.style.transform = `translateY(${scrollY * 0.3}px)`;
+            if (heroStats) heroStats.style.transform = `translateY(${scrollY * 0.15}px)`;
+        });
+
         function animate() {
             requestAnimationFrame(animate);
             if (model) {
-                const elapsedTime = clock.getElapsedTime();
-                // Легкое покачивание от мыши
-                model.rotation.y = mouseX * 0.5 + elapsedTime * 0.1; 
-                model.rotation.x = mouseY * 0.2;
+                model.rotation.y += (targetRotationY - model.rotation.y) * 0.05;
+                model.rotation.x += (targetRotationX - model.rotation.x) * 0.05;
+                model.rotation.y += scrollY * 0.001; // Вращение от скролла
             }
             renderer.render(scene, camera);
         }
