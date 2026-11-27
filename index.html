@@ -26,6 +26,7 @@
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
+            /* Убираем стандартный скролл для эффекта Apple */
         }
 
         h1, h2, h3 { font-family: 'Oswald', sans-serif; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
@@ -52,11 +53,9 @@
         }
         .btn:hover { background: #e64500; }
 
-        /* ГЛАВНЫЙ ЭКРАН С 3D */
+        /* ГЛАВНЫЙ ЭКРАН (Кинематографичный) */
         .hero {
-            height: 100vh;
-            display: flex; flex-direction: column; justify-content: center;
-            padding: 120px 5% 60px 5%;
+            height: 100vh; /* Полная высота экрана */
             position: relative;
             overflow: hidden;
             border-bottom: 1px solid var(--border);
@@ -68,27 +67,33 @@
             position: absolute;
             top: 0;
             right: 0;
-            width: 60%;
+            width: 100%; /* 3D на весь экран */
             height: 100%;
             z-index: 1;
         }
 
-        /* Градиент для контраста (закрывает левую часть, чтобы текст читался) */
+        /* Градиент для контраста */
         .hero::before {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(90deg, rgba(5,5,5,1) 0%, rgba(5,5,5,0.9) 30%, rgba(5,5,5,0.1) 100%);
+            background: linear-gradient(90deg, rgba(5,5,5,1) 0%, rgba(5,5,5,0.8) 40%, rgba(5,5,5,0.0) 100%);
             z-index: 2;
             pointer-events: none;
         }
 
-        .hero-content, .hero-stats {
+        .hero-content-wrapper {
             position: relative;
             z-index: 3;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 5%;
+            padding-top: 80px; /* Под хедер */
         }
 
-        .hero-content { max-width: 800px; margin-top: auto; margin-bottom: auto; }
+        .hero-content { max-width: 800px; }
         .hero h1 { font-size: 7rem; line-height: 0.9; margin-bottom: 30px; color: #fff; text-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .hero h1 span { color: var(--accent); }
         .hero p { font-size: 1.2rem; color: #aaa; margin-bottom: 50px; max-width: 500px; }
@@ -98,12 +103,17 @@
             display: flex; gap: 60px;
             border-top: 1px solid rgba(255,255,255,0.1);
             padding-top: 30px; margin-top: 40px;
+            position: absolute;
+            bottom: 60px;
+            left: 5%;
+            width: 90%;
+            z-index: 3;
         }
         .stat-item .stat-num { font-family: 'Oswald', sans-serif; font-size: 2.5rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 5px; }
         .stat-item .stat-text { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
         /* СЕКЦИЯ УСЛУГ */
-        .services { padding: 120px 5%; background: var(--bg); }
+        .services { padding: 120px 5%; background: var(--bg); position: relative; z-index: 10; }
         
         .section-header {
             display: flex; justify-content: space-between; align-items: flex-end;
@@ -147,6 +157,7 @@
             color: var(--text); 
             border-top: 1px solid var(--border); 
             border-bottom: 1px solid var(--border); 
+            position: relative; z-index: 10;
         }
         
         .features-container { max-width: 1200px; margin: 0 auto; }
@@ -174,7 +185,7 @@
         .feature-item p { color: var(--text-muted); font-size: 0.9rem; }
 
         /* КОНТАКТЫ */
-        .contact { padding: 120px 5%; background: var(--bg); }
+        .contact { padding: 120px 5%; background: var(--bg); position: relative; z-index: 10;}
         
         .contact-inner { 
             max-width: 1200px; margin: 0 auto; 
@@ -200,7 +211,7 @@
         input:focus, textarea:focus { outline: none; border-bottom-color: var(--accent); }
         textarea { resize: none; height: 80px; }
 
-        footer { padding: 40px 5%; border-top: 1px solid var(--border); display: flex; justify-content: space-between; color: var(--text-muted); font-size: 0.9rem; max-width: 1200px; margin: 0 auto; }
+        footer { padding: 40px 5%; border-top: 1px solid var(--border); display: flex; justify-content: space-between; color: var(--text-muted); font-size: 0.9rem; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10;}
 
         /* Анимации */
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
@@ -213,8 +224,8 @@
             .service-desc { display: none; }
             .features-grid { grid-template-columns: repeat(2, 1fr); }
             .contact-inner { grid-template-columns: 1fr; gap: 50px; }
-            .hero-stats { flex-wrap: wrap; gap: 30px; }
-            #canvas-container { width: 100%; opacity: 0.2; } 
+            .hero-stats { flex-wrap: wrap; gap: 30px; bottom: 20px;}
+            #canvas-container { opacity: 0.4; }
         }
         @media (max-width: 768px) {
             .hero h1 { font-size: 3rem; }
@@ -238,28 +249,28 @@
 
     <!-- ГЛАВНЫЙ ЭКРАН С 3D -->
     <section class="hero" id="home">
-        <!-- Контейнер для 3D-модели -->
         <div id="canvas-container"></div>
 
-        <div class="hero-content reveal">
-            <h1>ТОЧНОСТЬ<br>В <span>МЕТАЛЛЕ</span></h1>
-            <p>Промышленная металлообработка и лазерная резка в СПб. Собственное производство. Работаем по чертежам любой сложности.</p>
-            <a href="#contact" class="btn nav-link">Обсудить проект</a>
-        </div>
+        <div class="hero-content-wrapper">
+            <div class="hero-content reveal">
+                <h1>ТОЧНОСТЬ<br>В <span>МЕТАЛЛЕ</span></h1>
+                <p>Промышленная металлообработка и лазерная резка в СПб. Собственное производство. Работаем по чертежам любой сложности.</p>
+                <a href="#contact" class="btn nav-link">Обсудить проект</a>
+            </div>
 
-        <!-- Плашка со статистикой -->
-        <div class="hero-stats reveal">
-            <div class="stat-item">
-                <div class="stat-num">10+</div>
-                <div class="stat-text">Лет на рынке</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-num">500+</div>
-                <div class="stat-text">Выполненных заказов</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-num">TRUMPF</div>
-                <div class="stat-text">Оборудование</div>
+            <div class="hero-stats reveal">
+                <div class="stat-item">
+                    <div class="stat-num">10+</div>
+                    <div class="stat-text">Лет на рынке</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">500+</div>
+                    <div class="stat-text">Выполненных заказов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">TRUMPF</div>
+                    <div class="stat-text">Оборудование</div>
+                </div>
             </div>
         </div>
     </section>
@@ -397,7 +408,10 @@
         // 1. Инициализация 3D
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
+        
+        // Камера с перспективой для 3D-зума
         const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+        // Начальная позиция камеры (станок виден целиком)
         camera.position.set(0, 2, 15);
 
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -415,7 +429,7 @@
         spotLight.castShadow = true;
         scene.add(spotLight);
 
-        const pointLight = new THREE.PointLight(0xFF4D00, 3);
+        const pointLight = new THREE.PointLight(0xFF4D00, 3); // Оранжевый
         pointLight.position.set(-5, 5, 10);
         scene.add(pointLight);
 
@@ -433,6 +447,7 @@
             model.position.y += (model.position.y - center.y);
             model.position.z += (model.position.z - center.z);
 
+            // Масштаб (если станок слишком маленький/большой)
             model.scale.set(1, 1, 1); 
 
             scene.add(model);
@@ -440,36 +455,38 @@
             console.error('Ошибка загрузки 3D:', error);
         });
 
-        // Анимация от мыши и скролла
-        let mouseX = 0;
-        let mouseY = 0;
-        let targetRotationY = 0;
-        let targetRotationX = 0;
+        // Отслеживание скролла и мыши
         let scrollY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-            targetRotationY = mouseX * 0.5;
-            targetRotationX = mouseY * 0.2;
-        });
+        let mouseX = 0;
 
         window.addEventListener('scroll', () => {
             scrollY = window.scrollY;
-            // Параллакс для текста
-            const heroContent = document.querySelector('.hero-content');
-            const heroStats = document.querySelector('.hero-stats');
-            if (heroContent) heroContent.style.transform = `translateY(${scrollY * 0.3}px)`;
-            if (heroStats) heroStats.style.transform = `translateY(${scrollY * 0.15}px)`;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
         });
 
         function animate() {
             requestAnimationFrame(animate);
+            
             if (model) {
-                model.rotation.y += (targetRotationY - model.rotation.y) * 0.05;
-                model.rotation.x += (targetRotationX - model.rotation.x) * 0.05;
-                model.rotation.y += scrollY * 0.001; // Вращение от скролла
+                // Вращение от мыши (по горизонтали)
+                model.rotation.y += (mouseX * 0.5 - model.rotation.y) * 0.05;
+
+                // === КИНЕМАТОГРАФИЧНЫЙ ЭФФЕКТ ПРИБЛИЖЕНИЯ ===
+                // Чем больше скроллим, тем ближе камера
+                const zoomFactor = Math.max(0.1, 1 - (scrollY / 2000)); 
+                
+                // Ограничиваем приближение, чтобы не пролететь сквозь станок
+                if (scrollY < 1000) {
+                    // Плавный зум (камера едет вперед)
+                    camera.position.z = 15 - (scrollY * 0.005); 
+                    // Камера немного смещается вправо, чтобы рассмотреть детали
+                    camera.position.x = scrollY * 0.001;
+                }
             }
+            
             renderer.render(scene, camera);
         }
         animate();
@@ -480,14 +497,14 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
         });
 
-        // 2. Форма
+        // Форма
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
             alert('Заявка отправлена! Мы свяжемся с вами.');
             this.reset();
         });
 
-        // 3. Анимация появления
+        // Анимация появления
         const reveals = document.querySelectorAll('.reveal');
         const revealOnScroll = () => {
             const windowHeight = window.innerHeight;
@@ -500,7 +517,7 @@
         window.addEventListener('scroll', revealOnScroll);
         revealOnScroll();
 
-        // 4. Плавный скролл
+        // Плавный скролл
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault(); 
