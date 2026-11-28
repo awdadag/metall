@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MFACTURED — Промышленная металлообработка</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,21 +10,24 @@
     
     <style>
         :root {
-            --bg: #050505;          
-            --surface: #0d0d0d;     
-            --text: #ffffff;
-            --text-muted: #777777;
-            --accent: #FF4D00;      
-            --border: #1f1f1f;
+            --bg: #000000;          /* Чистый черный, как у Apple */
+            --surface: #0a0a0a;     
+            --text: #f5f5f7;        /* Фирменный белый Apple */
+            --text-muted: #86868b;  /* Серый Apple */
+            --accent: #0071e3;      /* Apple Blue */
+            --accent-glow: rgba(0, 113, 227, 0.4); /* Свечение */
+            --border: #333333;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg);
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         h1, h2, h3 { font-family: 'Oswald', sans-serif; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
@@ -32,9 +35,9 @@
 
         /* ХЕДЕР */
         header {
-            position: fixed; top: 0; width: 100%; padding: 25px 5%;
+            position: fixed; top: 0; width: 100%; padding: 20px 5%;
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(20px);
             z-index: 1000; border-bottom: 1px solid var(--border);
         }
         .logo { font-family: 'Oswald', sans-serif; font-size: 1.6rem; font-weight: 700; letter-spacing: 2px; }
@@ -43,13 +46,15 @@
         .nav-links a { font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s; color: var(--text-muted); cursor: pointer; }
         .nav-links a:hover { color: var(--text); }
         
+        /* Кнопка с подсветкой */
         .btn {
-            background: var(--accent); color: #fff; padding: 15px 30px;
+            background: var(--accent); color: #fff; padding: 12px 25px;
             font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;
-            border: none; cursor: pointer; transition: background 0.3s;
-            border-radius: 0px; display: inline-block;
+            border: none; cursor: pointer; transition: all 0.3s;
+            border-radius: 20px; display: inline-block;
+            box-shadow: 0 0 15px var(--accent-glow);
         }
-        .btn:hover { background: #e64500; }
+        .btn:hover { background: #0077ed; box-shadow: 0 0 25px var(--accent-glow); transform: translateY(-2px); }
 
         /* 3D-ФОН */
         #canvas-container {
@@ -62,30 +67,20 @@
             pointer-events: none;
         }
 
-        /* === ГЛАВНЫЙ ЭКРАН (SCROLLYTELLING APPLE) === */
-        .hero-scrolly {
-            height: 300vh; /* 3 экрана для скролла (быстро, но достаточно для анимации) */
+        /* ГЛАВНЫЙ ЭКРАН */
+        .hero {
+            height: 100vh;
+            display: flex; flex-direction: column; justify-content: center;
+            padding: 120px 5% 60px 5%;
             position: relative;
+            border-bottom: 1px solid var(--border);
             background: transparent;
         }
 
-        /* Липкая обертка, которая держит контент на экране */
-        .sticky-viewport {
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 120px 5% 60px 5%;
-            overflow: hidden;
-        }
-
-        /* Градиент для читаемости */
         .hero-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(90deg, rgba(5,5,5,1) 0%, rgba(5,5,5,0.8) 40%, rgba(5,5,5,0.0) 100%);
+            background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 40%, rgba(0,0,0,0.0) 100%);
             z-index: 1;
             pointer-events: none;
         }
@@ -96,39 +91,20 @@
             max-width: 1200px;
             margin: 0 auto;
             width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
         }
 
-        /* Слайды с текстом */
-        .text-slide {
-            position: absolute;
-            max-width: 800px;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            pointer-events: none;
-        }
+        .hero-content { max-width: 800px; }
+        .hero h1 { font-size: 6.5rem; line-height: 0.95; margin-bottom: 25px; color: #fff; }
+        .hero h1 span { color: var(--accent); text-shadow: 0 0 20px var(--accent-glow); }
+        .hero p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 40px; max-width: 500px; }
 
-        .text-slide.active {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-
-        .text-slide h1 { font-size: 7rem; line-height: 0.9; margin-bottom: 30px; color: #fff; }
-        .text-slide h1 span { color: var(--accent); }
-        .text-slide p { font-size: 1.2rem; color: #aaa; margin-bottom: 50px; max-width: 500px; }
-
-        /* Блок статистики (только на первом слайде) */
+        /* Статистика */
         .hero-stats {
             display: flex; gap: 60px;
             border-top: 1px solid rgba(255,255,255,0.1);
             padding-top: 30px; margin-top: 40px;
         }
-        .stat-item .stat-num { font-family: 'Oswald', sans-serif; font-size: 2.5rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 5px; }
+        .stat-item .stat-num { font-family: 'Oswald', sans-serif; font-size: 2.5rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 5px; text-shadow: 0 0 10px var(--accent-glow); }
         .stat-item .stat-text { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
         /* ОСТАЛЬНОЙ КОНТЕНТ */
@@ -168,7 +144,7 @@
         .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; margin-top: 60px; }
         .feature-item { border-left: 2px solid var(--border); padding-left: 20px; transition: border-color 0.3s; }
         .feature-item:hover { border-left-color: var(--accent); }
-        .feature-num { font-family: 'Oswald', sans-serif; font-size: 2.5rem; color: var(--accent); margin-bottom: 15px; }
+        .feature-num { font-family: 'Oswald', sans-serif; font-size: 2.5rem; color: var(--accent); margin-bottom: 15px; text-shadow: 0 0 10px var(--accent-glow); }
         .feature-item h3 { font-size: 1.1rem; margin-bottom: 10px; color: #fff; letter-spacing: 0; font-family: 'Inter', sans-serif; font-weight: 600; }
         .feature-item p { color: var(--text-muted); font-size: 0.9rem; }
 
@@ -190,35 +166,47 @@
             border-bottom: 1px solid var(--border); color: #fff; font-family: 'Inter', sans-serif; font-size: 1rem;
             transition: border-color 0.3s;
         }
-        input:focus, textarea:focus { outline: none; border-bottom-color: var(--accent); }
+        input:focus, textarea:focus { outline: none; border-bottom-color: var(--accent); box-shadow: 0 1px 0 var(--accent); }
         textarea { resize: none; height: 80px; }
 
         footer { padding: 40px 5%; border-top: 1px solid var(--border); display: flex; justify-content: space-between; color: var(--text-muted); font-size: 0.9rem; max-width: 1200px; margin: 0 auto; }
 
-        /* Анимации появления для остального */
+        /* Анимации */
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
+        /* =========================================
+           МОБИЛЬНАЯ ВЕРСИЯ (Адаптив)
+           ========================================= */
         @media (max-width: 992px) {
-            .text-slide h1 { font-size: 4rem; }
+            .hero h1 { font-size: 4rem; }
             .nav-links { display: none; }
             .service-row { grid-template-columns: 40px 1fr; gap: 20px; padding: 30px 0; }
             .service-desc { display: none; }
             .features-grid { grid-template-columns: repeat(2, 1fr); }
             .contact-inner { grid-template-columns: 1fr; gap: 50px; }
-            .hero-stats { flex-wrap: wrap; gap: 30px; }
-            #canvas-container { opacity: 0.3; }
+            
+            /* На планшетах 3D тусклее */
+            #canvas-container { opacity: 0.15; } 
+            .hero-overlay { background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.95) 100%); }
         }
+        
         @media (max-width: 768px) {
-            .text-slide h1 { font-size: 3rem; }
+            .hero h1 { font-size: 3rem; }
             .section-header { flex-direction: column; align-items: flex-start; gap: 20px; }
             .features-grid { grid-template-columns: 1fr; }
             footer { flex-direction: column; gap: 20px; text-align: center; }
+            
+            /* На телефонах полностью скрываем 3D, чтобы текст читался идеально */
+            #canvas-container { display: none; } 
+            .hero-overlay { background: none; }
+            .hero-stats { flex-wrap: wrap; gap: 30px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- 3D-ФОН -->
     <div id="canvas-container"></div>
 
     <header>
@@ -231,46 +219,28 @@
         <a href="#contact" class="btn nav-link">Заказать расчет</a>
     </header>
 
-    <!-- ГЛАВНЫЙ ЭКРАН (APPLE STYLE) -->
-    <section class="hero-scrolly" id="home">
-        <div class="sticky-viewport">
-            <div class="hero-overlay"></div>
-            
-            <div class="hero-content-wrapper">
-                
-                <!-- Слайд 1 -->
-                <div class="text-slide active" id="slide-1">
-                    <h1>ТОЧНОСТЬ<br>В <span>МЕТАЛЛЕ</span></h1>
-                    <p>Промышленная металлообработка и лазерная резка в СПб. Собственное производство. Работаем по чертежам любой сложности.</p>
-                    <div class="hero-stats">
-                        <div class="stat-item">
-                            <div class="stat-num">10+</div>
-                            <div class="stat-text">Лет на рынке</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-num">500+</div>
-                            <div class="stat-text">Выполненных заказов</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-num">TRUMPF</div>
-                            <div class="stat-text">Оборудование</div>
-                        </div>
-                    </div>
+    <!-- ГЛАВНЫЙ ЭКРАН -->
+    <section class="hero" id="home">
+        <div class="hero-overlay"></div>
+        <div class="hero-content-wrapper">
+            <div class="hero-content reveal">
+                <h1>ТОЧНОСТЬ<br>В <span>МЕТАЛЛЕ</span></h1>
+                <p>Промышленная металлообработка и лазерная резка в СПб. Собственное производство. Работаем по чертежам любой сложности.</p>
+                <a href="#contact" class="btn nav-link">Обсудить проект</a>
+            </div>
+            <div class="hero-stats reveal">
+                <div class="stat-item">
+                    <div class="stat-num">10+</div>
+                    <div class="stat-text">Лет на рынке</div>
                 </div>
-
-                <!-- Слайд 2 -->
-                <div class="text-slide" id="slide-2">
-                    <h1>ЧПУ<br><span>СТАНКИ</span></h1>
-                    <p>Оборудование TRUMPF и BYSTRONIC. Высокоточная резка металла до 20 мм. Идеальное качество кромки.</p>
+                <div class="stat-item">
+                    <div class="stat-num">500+</div>
+                    <div class="stat-text">Выполненных заказов</div>
                 </div>
-
-                <!-- Слайд 3 -->
-                <div class="text-slide" id="slide-3">
-                    <h1>СРОКИ<br><span>ОТ 1 ДНЯ</span></h1>
-                    <p>Налаженные процессы позволяют выполнять срочные заказы для юрлиц и ИП по всей России.</p>
-                    <a href="#contact" class="btn nav-link" style="margin-top: 20px;">Обсудить проект</a>
+                <div class="stat-item">
+                    <div class="stat-num">TRUMPF</div>
+                    <div class="stat-text">Оборудование</div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -365,6 +335,11 @@
                     <div class="label">Почта</div>
                     <div class="value">info@mfactured.ru</div>
                 </div>
+                <div style="margin-top: 40px; border: 1px solid var(--border); padding: 40px; background: var(--surface); position: relative; overflow: hidden; border-radius: 12px;">
+                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--border) 1px, transparent 1px); background-size: 20px 20px; opacity: 0.3;"></div>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 10px; position: relative; z-index: 2;">Работаем по СПб и области</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; position: relative; z-index: 2;">Собственное производство. Приезжайте на экскурсию.</p>
+                </div>
             </div>
 
             <div class="reveal">
@@ -400,6 +375,7 @@
         // 1. Инициализация 3D
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
+        
         const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
         camera.position.set(0, 2, 15);
 
@@ -409,68 +385,55 @@
         renderer.outputEncoding = THREE.sRGBEncoding; 
         container.appendChild(renderer.domElement);
 
-        // Свет
+        // Свет (сделаем более холодным и с синим отливом)
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
         scene.add(ambientLight);
+        
         const spotLight = new THREE.SpotLight(0xffffff, 3);
         spotLight.position.set(10, 20, 10);
         scene.add(spotLight);
-        const pointLight = new THREE.PointLight(0xFF4D00, 5);
+        
+        const pointLight = new THREE.PointLight(0x0071e3, 5); // Синий свет
         pointLight.position.set(-10, 5, 10);
         scene.add(pointLight);
 
-        // Модель
+        // Загрузка модели
         const loader = new THREE.GLTFLoader();
         let model;
 
         loader.load('cnc-machine.glb', function (gltf) {
             model = gltf.scene;
+            
+            // Центрируем
             const box = new THREE.Box3().setFromObject(model);
             const center = box.getCenter(new THREE.Vector3());
             model.position.x += (model.position.x - center.x);
             model.position.y += (model.position.y - center.y);
             model.position.z += (model.position.z - center.z);
+
+            // Начальный ракурс
             model.rotation.y = Math.PI / 4; 
+
             scene.add(model);
+        }, undefined, function (error) {
+            console.error('Ошибка загрузки 3D:', error);
         });
 
-        // === ЛОГИКА APPLE SCROLLYTELLING ===
-        const heroSection = document.querySelector('.hero-scrolly');
-        const slides = document.querySelectorAll('.text-slide');
-        
-        window.addEventListener('scroll', () => {
-            const heroHeight = heroSection.offsetHeight - window.innerHeight;
-            let progress = window.scrollY / heroHeight;
-            if (progress > 1) progress = 1;
-            if (progress < 0) progress = 0;
-
-            // Вращение станка и движение камеры
-            if (model) {
-                // Станок делает пол-оборота за весь скролл
-                model.rotation.y = (Math.PI / 4) + (progress * Math.PI); 
-                // Камера подлетает ближе
-                camera.position.z = 15 - (progress * 3);
-                camera.position.x = progress * 2; // Смещение вбок
-            }
-
-            // Смена слайдов (появление текста)
-            if (progress < 0.33) {
-                slides[0].classList.add('active');
-                slides[1].classList.remove('active');
-                slides[2].classList.remove('active');
-            } else if (progress >= 0.33 && progress < 0.66) {
-                slides[0].classList.remove('active');
-                slides[1].classList.add('active');
-                slides[2].classList.remove('active');
-            } else {
-                slides[0].classList.remove('active');
-                slides[1].classList.remove('active');
-                slides[2].classList.add('active');
-            }
-        });
+        // Плавное вращение (без скролла)
+        const clock = new THREE.Clock();
 
         function animate() {
             requestAnimationFrame(animate);
+            
+            if (model) {
+                const elapsedTime = clock.getElapsedTime();
+                // Медленное вращение
+                model.rotation.y += 0.002; 
+                
+                // Эффект парения
+                model.position.y = Math.sin(elapsedTime * 0.5) * 0.2;
+            }
+            
             renderer.render(scene, camera);
         }
         animate();
@@ -489,7 +452,7 @@
             this.reset();
         });
 
-        // 3. Анимация появления для остальных секций
+        // 3. Анимация появления
         const reveals = document.querySelectorAll('.reveal');
         const revealOnScroll = () => {
             const windowHeight = window.innerHeight;
