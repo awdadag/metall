@@ -52,31 +52,38 @@
         }
         .btn:hover { background: #e64500; }
 
-        /* 3D-ФОН (ФИКСИРОВАННЫЙ) */
+        /* 3D-ФОН */
         #canvas-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: -1; /* Уходит на самый задний план */
+            z-index: -1;
             pointer-events: none;
-            opacity: 1;
-            transition: opacity 0.8s ease;
         }
 
-        /* ГЛАВНЫЙ ЭКРАН */
+        /* ГЛАВНЫЙ ЭКРАН (Высокий для скролла) */
         .hero {
-            height: 100vh;
-            display: flex; flex-direction: column; justify-content: center;
-            padding: 120px 5% 60px 5%;
+            height: 300vh; /* 3 экрана высоты для эффекта */
             position: relative;
             border-bottom: 1px solid var(--border);
             background: transparent;
             z-index: 10;
         }
 
-        /* Градиент для контраста */
+        /* Контент, который прилипает к верху */
+        .hero-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 5%;
+        }
+
+        /* Градиент */
         .hero-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -91,10 +98,6 @@
             max-width: 1200px;
             margin: 0 auto;
             width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
         }
 
         .hero-content { max-width: 800px; }
@@ -106,15 +109,12 @@
         .hero-stats {
             display: flex; gap: 60px;
             border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 30px;
-            position: absolute;
-            bottom: 60px;
-            width: 100%;
+            padding-top: 30px; margin-top: 40px;
         }
         .stat-item .stat-num { font-family: 'Oswald', sans-serif; font-size: 2.5rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 5px; }
         .stat-item .stat-text { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* ОСТАЛЬНОЙ КОНТЕНТ (Непрозрачный фон) */
+        /* ОСТАЛЬНОЙ КОНТЕНТ */
         .services, .features, .contact, footer {
             background-color: var(--bg);
             position: relative;
@@ -123,7 +123,6 @@
 
         /* СЕКЦИЯ УСЛУГ */
         .services { padding: 120px 5%; }
-        
         .section-header {
             display: flex; justify-content: space-between; align-items: flex-end;
             margin-bottom: 80px; border-bottom: 1px solid var(--border); padding-bottom: 30px;
@@ -131,31 +130,17 @@
         }
         .section-header h2 { font-size: 3.5rem; }
         .section-header p { color: var(--text-muted); max-width: 400px; font-size: 1rem; }
-
         .services-list { border-top: 1px solid var(--border); max-width: 1200px; margin: 0 auto; }
-
         .service-row {
-            display: grid;
-            grid-template-columns: 80px 350px 1fr 50px;
-            align-items: center;
-            padding: 40px 0;
-            border-bottom: 1px solid var(--border);
-            transition: all 0.4s ease;
-            cursor: pointer;
+            display: grid; grid-template-columns: 80px 350px 1fr 50px;
+            align-items: center; padding: 40px 0; border-bottom: 1px solid var(--border);
+            transition: all 0.4s ease; cursor: pointer;
         }
-
-        .service-row:hover {
-            background: var(--surface);
-            padding-left: 20px;
-            border-bottom-color: var(--accent);
-        }
-
+        .service-row:hover { background: var(--surface); padding-left: 20px; border-bottom-color: var(--accent); }
         .service-num { font-family: 'Oswald', sans-serif; font-size: 1.2rem; color: var(--text-muted); }
         .service-row:hover .service-num { color: var(--accent); }
-
         .service-title { font-family: 'Oswald', sans-serif; font-size: 2rem; text-transform: uppercase; color: #fff; }
         .service-desc { color: var(--text-muted); font-size: 1rem; padding-right: 40px; }
-        
         .service-arrow { font-size: 1.5rem; color: var(--accent); transition: transform 0.3s; }
         .service-row:hover .service-arrow { transform: translateX(10px); }
 
@@ -204,7 +189,7 @@
             .service-desc { display: none; }
             .features-grid { grid-template-columns: repeat(2, 1fr); }
             .contact-inner { grid-template-columns: 1fr; gap: 50px; }
-            .hero-stats { flex-wrap: wrap; gap: 30px; bottom: 20px;}
+            .hero-stats { flex-wrap: wrap; gap: 30px; }
             #canvas-container { opacity: 0.3; }
         }
         @media (max-width: 768px) {
@@ -232,27 +217,27 @@
 
     <!-- ГЛАВНЫЙ ЭКРАН -->
     <section class="hero" id="home">
-        <div class="hero-overlay"></div>
-        
-        <div class="hero-content-wrapper">
-            <div class="hero-content reveal">
-                <h1>ТОЧНОСТЬ<br>В <span>МЕТАЛЛЕ</span></h1>
-                <p>Промышленная металлообработка и лазерная резка в СПб. Собственное производство. Работаем по чертежам любой сложности.</p>
-                <a href="#contact" class="btn nav-link">Обсудить проект</a>
-            </div>
-
-            <div class="hero-stats reveal">
-                <div class="stat-item">
-                    <div class="stat-num">10+</div>
-                    <div class="stat-text">Лет на рынке</div>
+        <div class="hero-sticky">
+            <div class="hero-overlay"></div>
+            <div class="hero-content-wrapper">
+                <div class="hero-content reveal">
+                    <h1>ТОЧНОСТЬ<br>В <span>МЕТАЛЛЕ</span></h1>
+                    <p>Промышленная металлообработка и лазерная резка в СПб. Собственное производство. Работаем по чертежам любой сложности.</p>
+                    <a href="#contact" class="btn nav-link">Обсудить проект</a>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-num">500+</div>
-                    <div class="stat-text">Выполненных заказов</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-num">TRUMPF</div>
-                    <div class="stat-text">Оборудование</div>
+                <div class="hero-stats reveal">
+                    <div class="stat-item">
+                        <div class="stat-num">10+</div>
+                        <div class="stat-text">Лет на рынке</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num">500+</div>
+                        <div class="stat-text">Выполненных заказов</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num">TRUMPF</div>
+                        <div class="stat-text">Оборудование</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -264,7 +249,6 @@
             <h2>УСЛУГИ</h2>
             <p>Полный цикл металлообработки. От единичных деталей до серийного производства.</p>
         </div>
-        
         <div class="services-list">
             <div class="service-row reveal">
                 <div class="service-num">01</div>
@@ -337,7 +321,6 @@
             <div class="contact-info reveal">
                 <h2>ОСТАВИТЬ<br>ЗАЯВКУ</h2>
                 <p>Оставьте заявку, и мы в течение 1-2 рабочих дней рассчитаем точную стоимость вашего заказа.</p>
-                
                 <div class="info-block">
                     <div class="label">Адрес</div>
                     <div class="value">СПб, Придорожная аллея, 8</div>
@@ -350,7 +333,6 @@
                     <div class="label">Почта</div>
                     <div class="value">info@mfactured.ru</div>
                 </div>
-
                 <div style="margin-top: 40px; border: 1px solid var(--border); padding: 40px; background: var(--surface); position: relative; overflow: hidden;">
                     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--border) 1px, transparent 1px); background-size: 20px 20px; opacity: 0.3;"></div>
                     <h3 style="font-size: 1.2rem; margin-bottom: 10px; position: relative; z-index: 2;">Работаем по СПб и области</h3>
@@ -392,7 +374,6 @@
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
         
-        // Камера
         const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
         camera.position.set(0, 2, 15);
 
@@ -405,11 +386,9 @@
         // Свет
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
         scene.add(ambientLight);
-        
         const spotLight = new THREE.SpotLight(0xffffff, 3);
         spotLight.position.set(10, 20, 10);
         scene.add(spotLight);
-        
         const pointLight = new THREE.PointLight(0xFF4D00, 5);
         pointLight.position.set(-10, 5, 10);
         scene.add(pointLight);
@@ -428,7 +407,7 @@
             model.position.y += (model.position.y - center.y);
             model.position.z += (model.position.z - center.z);
 
-            // Красивый ракурс (поворот на 45 градусов)
+            // Ставим начальный ракурс
             model.rotation.y = Math.PI / 4; 
 
             scene.add(model);
@@ -436,23 +415,36 @@
             console.error('Ошибка загрузки 3D:', error);
         });
 
-        // Отслеживание мыши
-        let mouseX = 0;
-        let mouseY = 0;
+        // --- ЭФФЕКТ APPLE (SCROLLYTELLING) ---
+        let scrollTarget = 0;
+        let scrollCurrent = 0;
 
-        document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+        window.addEventListener('scroll', () => {
+            const heroSection = document.querySelector('.hero');
+            const heroHeight = heroSection.offsetHeight - window.innerHeight;
+            
+            let progress = window.scrollY / heroHeight;
+            if (progress > 1) progress = 1;
+            if (progress < 0) progress = 0;
+            
+            scrollTarget = progress;
         });
 
-        // Анимация
         function animate() {
             requestAnimationFrame(animate);
             
+            // Плавная интерполяция скролла
+            scrollCurrent += (scrollTarget - scrollCurrent) * 0.05;
+
             if (model) {
-                // Плавный наклон (эффект облета камеры)
-                model.rotation.z += (-mouseX * 0.2 - model.rotation.z) * 0.05;
-                model.rotation.x += (mouseY * 0.1 - model.rotation.x) * 0.05;
+                // 1. Вращение модели на 360 градусов
+                model.rotation.y = (Math.PI / 4) + (scrollCurrent * Math.PI * 2);
+
+                // 2. Приближение камеры (зум)
+                camera.position.z = 15 - (scrollCurrent * 5); 
+
+                // 3. Смещение камеры вбок
+                camera.position.x = scrollCurrent * 3;
             }
             
             renderer.render(scene, camera);
