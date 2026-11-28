@@ -25,7 +25,6 @@
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
-            scroll-behavior: smooth;
         }
 
         h1, h2, h3 { font-family: 'Oswald', sans-serif; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
@@ -59,11 +58,11 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: -1; /* Уходит на задний план */
+            z-index: -1;
             pointer-events: none;
         }
 
-        /* ГЛАВНЫЙ ЭКРАН (Фиксированный) */
+        /* ГЛАВНЫЙ ЭКРАН */
         .hero {
             height: 100vh;
             display: flex; flex-direction: column; justify-content: center;
@@ -74,7 +73,6 @@
             z-index: 10;
         }
 
-        /* Градиент */
         .hero-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -169,15 +167,31 @@
 
         footer { padding: 40px 5%; border-top: 1px solid var(--border); display: flex; justify-content: space-between; color: var(--text-muted); font-size: 0.9rem; max-width: 1200px; margin: 0 auto; }
 
-        /* === АНИМАЦИЯ ПРИ СКРОЛЛЕ === */
+        /* === ЭФФЕКТ APPLE (СВЕЧЕНИЕ ПРИ СКРОЛЛЕ) === */
         .reveal {
             opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(40px);
+            filter: blur(8px); /* Легкое размытие, как в тумане */
+            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
+        
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
+            filter: blur(0);
+        }
+
+        /* Свечение для заголовков */
+        .reveal.active h1, 
+        .reveal.active h2 {
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Свечение для акцентных элементов (оранжевые цифры) */
+        .reveal.active .feature-num,
+        .reveal.active .service-num,
+        .reveal.active .stat-num {
+            text-shadow: 0 0 15px rgba(255, 77, 0, 0.4);
         }
 
         @media (max-width: 992px) {
@@ -212,16 +226,15 @@
         <a href="#contact" class="btn nav-link">Заказать расчет</a>
     </header>
 
-    <!-- ГЛАВНЫЙ ЭКРАН -->
     <section class="hero" id="home">
         <div class="hero-overlay"></div>
         <div class="hero-content-wrapper">
-            <div class="hero-content">
+            <div class="hero-content reveal active"> <!-- active, чтобы сразу было видно -->
                 <h1>ТОЧНОСТЬ<br>В <span>МЕТАЛЛЕ</span></h1>
                 <p>Промышленная металлообработка и лазерная резка в СПб. Собственное производство. Работаем по чертежам любой сложности.</p>
                 <a href="#contact" class="btn nav-link">Обсудить проект</a>
             </div>
-            <div class="hero-stats">
+            <div class="hero-stats reveal active">
                 <div class="stat-item">
                     <div class="stat-num">10+</div>
                     <div class="stat-text">Лет на рынке</div>
@@ -238,7 +251,6 @@
         </div>
     </section>
 
-    <!-- УСЛУГИ -->
     <section class="services" id="services">
         <div class="section-header reveal">
             <h2>УСЛУГИ</h2>
@@ -278,7 +290,6 @@
         </div>
     </section>
 
-    <!-- ПОЧЕМУ МЫ -->
     <section class="features" id="why">
         <div class="features-container">
             <div class="section-header reveal">
@@ -310,7 +321,6 @@
         </div>
     </section>
 
-    <!-- КОНТАКТЫ -->
     <section class="contact" id="contact">
         <div class="contact-inner">
             <div class="contact-info reveal">
@@ -394,7 +404,6 @@
             scene.add(model);
         });
 
-        // Вращение станка (медленное)
         const clock = new THREE.Clock();
         function animate() {
             requestAnimationFrame(animate);
@@ -407,7 +416,6 @@
         }
         animate();
 
-        // Ресайз
         window.addEventListener('resize', () => {
             camera.aspect = container.clientWidth / container.clientHeight;
             camera.updateProjectionMatrix();
@@ -421,18 +429,20 @@
             this.reset();
         });
 
-        // 3. Анимация появления при скролле (Reveal)
+        // 3. Эффект Apple при скролле (Свечение и размытие)
         const reveals = document.querySelectorAll('.reveal');
         const revealOnScroll = () => {
             const windowHeight = window.innerHeight;
             reveals.forEach((reveal) => {
-                if (reveal.getBoundingClientRect().top < windowHeight - 100) {
+                const revealTop = reveal.getBoundingClientRect().top;
+                // Если блок появился в поле зрения (на 100px выше низа экрана)
+                if (revealTop < windowHeight - 100) {
                     reveal.classList.add('active');
                 }
             });
         };
         window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll(); // Запускаем один раз при загрузке
+        revealOnScroll(); // Запуск при загрузке
 
         // 4. Плавный скролл
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
