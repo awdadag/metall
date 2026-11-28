@@ -52,7 +52,7 @@
         }
         .btn:hover { background: #e64500; }
 
-        /* 3D-ФОН */
+        /* 3D-ФОН (Фиксированный) */
         #canvas-container {
             position: fixed;
             top: 0;
@@ -63,24 +63,14 @@
             pointer-events: none;
         }
 
-        /* ГЛАВНЫЙ ЭКРАН (Высокий для скролла) */
+        /* ГЛАВНЫЙ ЭКРАН (Обычный, без скролл-джема) */
         .hero {
-            height: 300vh; /* 3 экрана высоты для эффекта */
+            height: 100vh;
+            display: flex; flex-direction: column; justify-content: center;
+            padding: 120px 5% 60px 5%;
             position: relative;
             border-bottom: 1px solid var(--border);
             background: transparent;
-            z-index: 10;
-        }
-
-        /* Контент, который прилипает к верху */
-        .hero-sticky {
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 0 5%;
         }
 
         /* Градиент */
@@ -217,27 +207,25 @@
 
     <!-- ГЛАВНЫЙ ЭКРАН -->
     <section class="hero" id="home">
-        <div class="hero-sticky">
-            <div class="hero-overlay"></div>
-            <div class="hero-content-wrapper">
-                <div class="hero-content reveal">
-                    <h1>ТОЧНОСТЬ<br>В <span>МЕТАЛЛЕ</span></h1>
-                    <p>Промышленная металлообработка и лазерная резка в СПб. Собственное производство. Работаем по чертежам любой сложности.</p>
-                    <a href="#contact" class="btn nav-link">Обсудить проект</a>
+        <div class="hero-overlay"></div>
+        <div class="hero-content-wrapper">
+            <div class="hero-content reveal">
+                <h1>ТОЧНОСТЬ<br>В <span>МЕТАЛЛЕ</span></h1>
+                <p>Промышленная металлообработка и лазерная резка в СПб. Собственное производство. Работаем по чертежам любой сложности.</p>
+                <a href="#contact" class="btn nav-link">Обсудить проект</a>
+            </div>
+            <div class="hero-stats reveal">
+                <div class="stat-item">
+                    <div class="stat-num">10+</div>
+                    <div class="stat-text">Лет на рынке</div>
                 </div>
-                <div class="hero-stats reveal">
-                    <div class="stat-item">
-                        <div class="stat-num">10+</div>
-                        <div class="stat-text">Лет на рынке</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-num">500+</div>
-                        <div class="stat-text">Выполненных заказов</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-num">TRUMPF</div>
-                        <div class="stat-text">Оборудование</div>
-                    </div>
+                <div class="stat-item">
+                    <div class="stat-num">500+</div>
+                    <div class="stat-text">Выполненных заказов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">TRUMPF</div>
+                    <div class="stat-text">Оборудование</div>
                 </div>
             </div>
         </div>
@@ -415,36 +403,19 @@
             console.error('Ошибка загрузки 3D:', error);
         });
 
-        // --- ЭФФЕКТ APPLE (SCROLLYTELLING) ---
-        let scrollTarget = 0;
-        let scrollCurrent = 0;
-
-        window.addEventListener('scroll', () => {
-            const heroSection = document.querySelector('.hero');
-            const heroHeight = heroSection.offsetHeight - window.innerHeight;
-            
-            let progress = window.scrollY / heroHeight;
-            if (progress > 1) progress = 1;
-            if (progress < 0) progress = 0;
-            
-            scrollTarget = progress;
-        });
+        // Плавное вращение (без скролла)
+        const clock = new THREE.Clock();
 
         function animate() {
             requestAnimationFrame(animate);
             
-            // Плавная интерполяция скролла
-            scrollCurrent += (scrollTarget - scrollCurrent) * 0.05;
-
             if (model) {
-                // 1. Вращение модели на 360 градусов
-                model.rotation.y = (Math.PI / 4) + (scrollCurrent * Math.PI * 2);
-
-                // 2. Приближение камеры (зум)
-                camera.position.z = 15 - (scrollCurrent * 5); 
-
-                // 3. Смещение камеры вбок
-                camera.position.x = scrollCurrent * 3;
+                const elapsedTime = clock.getElapsedTime();
+                // Медленное, величественное вращение
+                model.rotation.y += 0.002; 
+                
+                // Легкое покачивание по вертикали (эффект парения)
+                model.position.y = Math.sin(elapsedTime * 0.5) * 0.2;
             }
             
             renderer.render(scene, camera);
