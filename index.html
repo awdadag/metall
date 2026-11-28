@@ -58,20 +58,19 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 1; /* Теперь 3D ПОВЕРХ фона, но под текстом */
+            z-index: 1; 
             pointer-events: none;
         }
 
-        /* ГЛАВНЫЙ ЭКРАН (Скролл-презентация) */
+        /* ГЛАВНЫЙ ЭКРАН (Укороченный скролл) */
         .hero {
-            height: 400vh; /* 4 экрана для скролла */
+            height: 150vh; /* Всего 1.5 экрана вместо 4 */
             position: relative;
             border-bottom: 1px solid var(--border);
             background: transparent;
             z-index: 10;
         }
 
-        /* Липкий контейнер */
         .sticky-wrapper {
             position: sticky;
             top: 0;
@@ -81,13 +80,13 @@
             padding: 0 5%;
         }
 
-        /* Слайды текста */
+        /* Слайды */
         .slide {
             position: absolute;
             max-width: 500px;
             opacity: 0;
             transform: translateY(20px);
-            transition: all 0.6s ease;
+            transition: all 0.5s ease;
         }
 
         .slide.active {
@@ -100,7 +99,7 @@
         .slide p { font-size: 1.2rem; color: #aaa; }
         .slide .btn { margin-top: 30px; }
 
-        /* Затемнение для читаемости текста */
+        /* Затемнение */
         .hero-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -109,16 +108,14 @@
             pointer-events: none;
         }
 
-        /* СЕКЦИИ НИЖЕ */
+        /* ОСТАЛЬНЫЕ СЕКЦИИ */
         .services, .features, .contact, footer {
             background-color: var(--bg);
             position: relative;
-            z-index: 20; /* Поверх 3D */
+            z-index: 20;
         }
 
-        /* ... (ОСТАЛЬНЫЕ СТИЛИ ДЛЯ УСЛУГ, ПРЕИМУЩЕСТВ, ФОРМЫ ОСТАВЛЯЕМ БЕЗ ИЗМЕНЕНИЙ) ... */
-        /* (Скопируй их из предыдущего кода, они не менялись) */
-        
+        /* (СТИЛИ ДЛЯ УСЛУГ, ПРЕИМУЩЕСТВ, ФОРМЫ ОСТАВЬ КАК БЫЛО) */
         .services { padding: 120px 5%; }
         .section-header {
             display: flex; justify-content: space-between; align-items: flex-end;
@@ -141,7 +138,8 @@
         .service-arrow { font-size: 1.5rem; color: var(--accent); transition: transform 0.3s; }
         .service-row:hover .service-arrow { transform: translateX(10px); }
 
-        /* ... и так далее ... */
+        /* ... Дальше преимущества, контакты, футер ... */
+        /* (Скопируй их из предыдущего кода, они не менялись) */
 
         @media (max-width: 992px) {
             .slide h1 { font-size: 3rem; }
@@ -154,7 +152,6 @@
 </head>
 <body>
 
-    <!-- 3D-ФОН -->
     <div id="canvas-container"></div>
 
     <header>
@@ -167,25 +164,21 @@
         <a href="#contact" class="btn nav-link">Заказать расчет</a>
     </header>
 
-    <!-- ГЛАВНЫЙ ЭКРАН (Apple-style) -->
     <section class="hero" id="home">
         <div class="sticky-wrapper">
             <div class="hero-overlay"></div>
             
-            <!-- Слайд 1 -->
             <div class="slide active" id="slide-1">
                 <h1>ТОЧНОСТЬ<br>В <span>МЕТАЛЛЕ</span></h1>
                 <p>Промышленная металлообработка и лазерная резка в СПб. Собственное производство.</p>
                 <a href="#contact" class="btn nav-link">Обсудить проект</a>
             </div>
 
-            <!-- Слайд 2 (Появится при скролле) -->
             <div class="slide" id="slide-2">
                 <h1>ЧПУ<br><span>СТАНКИ</span></h1>
                 <p>Оборудование TRUMPF и BYSTRONIC. Высокоточная резка металла до 20 мм.</p>
             </div>
 
-            <!-- Слайд 3 (Появится при скролле) -->
             <div class="slide" id="slide-3">
                 <h1>СРОКИ<br><span>ОТ 1 ДНЯ</span></h1>
                 <p>Налаженные процессы позволяют выполнять срочные заказы для юрлиц и ИП.</p>
@@ -193,42 +186,13 @@
         </div>
     </section>
 
-    <!-- УСЛУГИ (ОСТАВЛЯЕМ КАК БЫЛО) -->
-    <section class="services" id="services">
-        <div class="section-header reveal">
-            <h2>УСЛУГИ</h2>
-            <p>Полный цикл металлообработки. От единичных деталей до серийного производства.</p>
-        </div>
-        <div class="services-list">
-            <div class="service-row reveal">
-                <div class="service-num">01</div>
-                <div class="service-title">Лазерная резка</div>
-                <div class="service-desc">Высокоточная резка металла на станках ЧПУ. Черная и нержавеющая сталь, алюминий до 20 мм.</div>
-                <div class="service-arrow">→</div>
-            </div>
-            <div class="service-row reveal">
-                <div class="service-num">02</div>
-                <div class="service-title">Токарные работы</div>
-                <div class="service-desc">Изготовление деталей любой сложности по вашим чертежам. Соблюдение всех допусков.</div>
-                <div class="service-arrow">→</div>
-            </div>
-            <div class="service-row reveal">
-                <div class="service-num">03</div>
-                <div class="service-title">Фрезеровка</div>
-                <div class="service-desc">Фрезеровка металла и других материалов. Создание пазов, отверстий, сложных форм.</div>
-                <div class="service-arrow">→</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ... ДАЛЬШЕ ИДУТ ПРЕИМУЩЕСТВА И КОНТАКТЫ (ВСТАВЬ ИХ ИЗ ПРЕДЫДУЩЕГО КОДА) ... -->
-
+    <!-- УСЛУГИ И ОСТАЛЬНОЕ (вставь из предыдущего кода) -->
+    
     <footer>
         <div>&copy; 2024 MFACTURED. Все права защищены.</div>
         <div><a href="privacy.html" style="color:var(--text-muted); text-decoration:underline;">Политика конфиденциальности</a></div>
     </footer>
 
-    <!-- СКРИПТЫ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     
@@ -270,7 +234,7 @@
             scene.add(model);
         });
 
-        // --- ЛОГИКА СКРОЛЛА APPLE ---
+        // Логика скролла (Укороченная)
         const heroSection = document.querySelector('.hero');
         const slides = document.querySelectorAll('.slide');
         
@@ -280,26 +244,23 @@
             if (progress > 1) progress = 1;
             if (progress < 0) progress = 0;
 
-            // Вращение модели
+            // Вращение модели и камеры
             if (model) {
-                model.rotation.y = (Math.PI / 4) + (progress * Math.PI * 2);
-                camera.position.z = 15 - (progress * 5);
-                camera.position.x = progress * 3;
+                // Делаем пол-оборота (быстрее)
+                model.rotation.y = (Math.PI / 4) + (progress * Math.PI); 
+                // Плавный зум
+                camera.position.z = 15 - (progress * 3);
             }
 
             // Смена слайдов
-            if (progress < 0.33) {
+            if (progress < 0.5) {
                 slides[0].classList.add('active');
                 slides[1].classList.remove('active');
-                slides[2].classList.remove('active');
-            } else if (progress >= 0.33 && progress < 0.66) {
-                slides[0].classList.remove('active');
-                slides[1].classList.add('active');
                 slides[2].classList.remove('active');
             } else {
                 slides[0].classList.remove('active');
                 slides[1].classList.remove('active');
-                slides[2].classList.add('active');
+                slides[2].classList.add('active'); // Сразу перекидываем на последний слайд
             }
         });
 
@@ -309,7 +270,7 @@
         }
         animate();
 
-        // Форма, Reveal, Плавный скролл (ОСТАВЬ КАК БЫЛО)
+        // (Форма, Reveal, Плавный скролл — оставь как было)
     </script>
 </body>
 </html>
