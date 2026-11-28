@@ -1,9 +1,398 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MFACTURED — Промышленная металлообработка</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #050505;          
+            --surface: #0d0d0d;     
+            --text: #ffffff;
+            --text-muted: #777777;
+            --accent: #FF4D00;      
+            --border: #1f1f1f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-family: 'Oswald', sans-serif; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+        a { text-decoration: none; color: inherit; }
+
+        /* ХЕДЕР */
+        header {
+            position: fixed; top: 0; width: 100%; padding: 25px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(10px);
+            z-index: 1000; border-bottom: 1px solid var(--border);
+        }
+        .logo { font-family: 'Oswald', sans-serif; font-size: 1.6rem; font-weight: 700; letter-spacing: 2px; }
+        .logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a { font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s; color: var(--text-muted); cursor: pointer; }
+        .nav-links a:hover { color: var(--text); }
+        
+        .btn {
+            background: var(--accent); color: #fff; padding: 15px 30px;
+            font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;
+            border: none; cursor: pointer; transition: background 0.3s;
+            border-radius: 0px; display: inline-block;
+        }
+        .btn:hover { background: #e64500; }
+
+        /* 3D-ФОН (ФИКСИРОВАННЫЙ) */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Уходит на самый задний план */
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity 0.8s ease;
+        }
+
+        /* ГЛАВНЫЙ ЭКРАН */
+        .hero {
+            height: 100vh;
+            display: flex; flex-direction: column; justify-content: center;
+            padding: 120px 5% 60px 5%;
+            position: relative;
+            border-bottom: 1px solid var(--border);
+            background: transparent;
+            z-index: 10;
+        }
+
+        /* Градиент для контраста */
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, rgba(5,5,5,1) 0%, rgba(5,5,5,0.85) 35%, rgba(5,5,5,0.1) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero-content-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-content { max-width: 800px; }
+        .hero h1 { font-size: 7rem; line-height: 0.9; margin-bottom: 30px; color: #fff; }
+        .hero h1 span { color: var(--accent); }
+        .hero p { font-size: 1.2rem; color: #aaa; margin-bottom: 50px; max-width: 500px; }
+
+        /* Статистика */
+        .hero-stats {
+            display: flex; gap: 60px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 30px;
+            position: absolute;
+            bottom: 60px;
+            width: 100%;
+        }
+        .stat-item .stat-num { font-family: 'Oswald', sans-serif; font-size: 2.5rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 5px; }
+        .stat-item .stat-text { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* ОСТАЛЬНОЙ КОНТЕНТ (Непрозрачный фон) */
+        .services, .features, .contact, footer {
+            background-color: var(--bg);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* СЕКЦИЯ УСЛУГ */
+        .services { padding: 120px 5%; }
+        
+        .section-header {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            margin-bottom: 80px; border-bottom: 1px solid var(--border); padding-bottom: 30px;
+            max-width: 1200px; margin-left: auto; margin-right: auto;
+        }
+        .section-header h2 { font-size: 3.5rem; }
+        .section-header p { color: var(--text-muted); max-width: 400px; font-size: 1rem; }
+
+        .services-list { border-top: 1px solid var(--border); max-width: 1200px; margin: 0 auto; }
+
+        .service-row {
+            display: grid;
+            grid-template-columns: 80px 350px 1fr 50px;
+            align-items: center;
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .service-row:hover {
+            background: var(--surface);
+            padding-left: 20px;
+            border-bottom-color: var(--accent);
+        }
+
+        .service-num { font-family: 'Oswald', sans-serif; font-size: 1.2rem; color: var(--text-muted); }
+        .service-row:hover .service-num { color: var(--accent); }
+
+        .service-title { font-family: 'Oswald', sans-serif; font-size: 2rem; text-transform: uppercase; color: #fff; }
+        .service-desc { color: var(--text-muted); font-size: 1rem; padding-right: 40px; }
+        
+        .service-arrow { font-size: 1.5rem; color: var(--accent); transition: transform 0.3s; }
+        .service-row:hover .service-arrow { transform: translateX(10px); }
+
+        /* СЕКЦИЯ ПРЕИМУЩЕСТВ */
+        .features { padding: 120px 5%; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .features-container { max-width: 1200px; margin: 0 auto; }
+        .features .section-header { border-bottom-color: var(--border); max-width: 100%; }
+        .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; margin-top: 60px; }
+        .feature-item { border-left: 2px solid var(--border); padding-left: 20px; transition: border-color 0.3s; }
+        .feature-item:hover { border-left-color: var(--accent); }
+        .feature-num { font-family: 'Oswald', sans-serif; font-size: 2.5rem; color: var(--accent); margin-bottom: 15px; }
+        .feature-item h3 { font-size: 1.1rem; margin-bottom: 10px; color: #fff; letter-spacing: 0; font-family: 'Inter', sans-serif; font-weight: 600; }
+        .feature-item p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* КОНТАКТЫ */
+        .contact { padding: 120px 5%; }
+        .contact-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+        .contact-info h2 { font-size: 3.5rem; margin-bottom: 30px; }
+        .contact-info p { color: var(--text-muted); margin-bottom: 40px; }
+        .info-block { margin-bottom: 25px; }
+        .info-block .label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .info-block .value { font-size: 1.2rem; color: #fff; font-weight: 500; }
+
+        /* Форма */
+        form { display: flex; flex-direction: column; gap: 20px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        .input-group label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        input, textarea {
+            width: 100%; padding: 15px 0; background: transparent; border: none;
+            border-bottom: 1px solid var(--border); color: #fff; font-family: 'Inter', sans-serif; font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        input:focus, textarea:focus { outline: none; border-bottom-color: var(--accent); }
+        textarea { resize: none; height: 80px; }
+
+        footer { padding: 40px 5%; border-top: 1px solid var(--border); display: flex; justify-content: space-between; color: var(--text-muted); font-size: 0.9rem; max-width: 1200px; margin: 0 auto; }
+
+        /* Анимации */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 4rem; }
+            .nav-links { display: none; }
+            .service-row { grid-template-columns: 40px 1fr; gap: 20px; padding: 30px 0; }
+            .service-desc { display: none; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .contact-inner { grid-template-columns: 1fr; gap: 50px; }
+            .hero-stats { flex-wrap: wrap; gap: 30px; bottom: 20px;}
+            #canvas-container { opacity: 0.3; }
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            .section-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+            .features-grid { grid-template-columns: 1fr; }
+            footer { flex-direction: column; gap: 20px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 3D-ФОН -->
+    <div id="canvas-container"></div>
+
+    <header>
+        <div class="logo">M<span>FACTURED</span></div>
+        <div class="nav-links">
+            <a href="#services" class="nav-link">Услуги</a>
+            <a href="#why" class="nav-link">О нас</a>
+            <a href="#contact" class="nav-link">Контакты</a>
+        </div>
+        <a href="#contact" class="btn nav-link">Заказать расчет</a>
+    </header>
+
+    <!-- ГЛАВНЫЙ ЭКРАН -->
+    <section class="hero" id="home">
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-content-wrapper">
+            <div class="hero-content reveal">
+                <h1>ТОЧНОСТЬ<br>В <span>МЕТАЛЛЕ</span></h1>
+                <p>Промышленная металлообработка и лазерная резка в СПб. Собственное производство. Работаем по чертежам любой сложности.</p>
+                <a href="#contact" class="btn nav-link">Обсудить проект</a>
+            </div>
+
+            <div class="hero-stats reveal">
+                <div class="stat-item">
+                    <div class="stat-num">10+</div>
+                    <div class="stat-text">Лет на рынке</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">500+</div>
+                    <div class="stat-text">Выполненных заказов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">TRUMPF</div>
+                    <div class="stat-text">Оборудование</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- УСЛУГИ -->
+    <section class="services" id="services">
+        <div class="section-header reveal">
+            <h2>УСЛУГИ</h2>
+            <p>Полный цикл металлообработки. От единичных деталей до серийного производства.</p>
+        </div>
+        
+        <div class="services-list">
+            <div class="service-row reveal">
+                <div class="service-num">01</div>
+                <div class="service-title">Лазерная резка</div>
+                <div class="service-desc">Высокоточная резка металла на станках ЧПУ. Черная и нержавеющая сталь, алюминий до 20 мм.</div>
+                <div class="service-arrow">→</div>
+            </div>
+            <div class="service-row reveal">
+                <div class="service-num">02</div>
+                <div class="service-title">Токарные работы</div>
+                <div class="service-desc">Изготовление деталей любой сложности по вашим чертежам. Соблюдение всех допусков.</div>
+                <div class="service-arrow">→</div>
+            </div>
+            <div class="service-row reveal">
+                <div class="service-num">03</div>
+                <div class="service-title">Фрезеровка</div>
+                <div class="service-desc">Фрезеровка металла и других материалов. Создание пазов, отверстий, сложных форм.</div>
+                <div class="service-arrow">→</div>
+            </div>
+            <div class="service-row reveal">
+                <div class="service-num">04</div>
+                <div class="service-title">Резка фанеры и МДФ</div>
+                <div class="service-desc">Лазерная резка дерева, МДФ, ХДФ. Идеально для декора и рекламных конструкций.</div>
+                <div class="service-arrow">→</div>
+            </div>
+            <div class="service-row reveal">
+                <div class="service-num">05</div>
+                <div class="service-title">Резка акрила</div>
+                <div class="service-desc">Фигурная резка оргстекла и пластика. Кромка получается ровной, без доп. обработки.</div>
+                <div class="service-arrow">→</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПОЧЕМУ МЫ -->
+    <section class="features" id="why">
+        <div class="features-container">
+            <div class="section-header reveal">
+                <h2>ПОЧЕМУ МЫ</h2>
+                <p>Мы не просто выполняем заказы. Мы решаем задачи вашего производства.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-item reveal">
+                    <div class="feature-num">01</div>
+                    <h3>Собственное производство</h3>
+                    <p>Оборудование от ведущих мировых брендов: TRUMPF, BYSTRONIC.</p>
+                </div>
+                <div class="feature-item reveal">
+                    <div class="feature-num">02</div>
+                    <h3>Скорость</h3>
+                    <p>Налаженные процессы и ЧПУ-станки позволяют работать в кратчайшие сроки.</p>
+                </div>
+                <div class="feature-item reveal">
+                    <div class="feature-num">03</div>
+                    <h3>Гарантия</h3>
+                    <p>Контроль на всех этапах. Гарантия на каждую деталь.</p>
+                </div>
+                <div class="feature-item reveal">
+                    <div class="feature-num">04</div>
+                    <h3>Договор</h3>
+                    <p>Работаем с юрлицами и ИП. Гибкая система оплаты и скидок.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- КОНТАКТЫ -->
+    <section class="contact" id="contact">
+        <div class="contact-inner">
+            <div class="contact-info reveal">
+                <h2>ОСТАВИТЬ<br>ЗАЯВКУ</h2>
+                <p>Оставьте заявку, и мы в течение 1-2 рабочих дней рассчитаем точную стоимость вашего заказа.</p>
+                
+                <div class="info-block">
+                    <div class="label">Адрес</div>
+                    <div class="value">СПб, Придорожная аллея, 8</div>
+                </div>
+                <div class="info-block">
+                    <div class="label">Телефон</div>
+                    <div class="value">8 (812) 919-24-43</div>
+                </div>
+                <div class="info-block">
+                    <div class="label">Почта</div>
+                    <div class="value">info@mfactured.ru</div>
+                </div>
+
+                <div style="margin-top: 40px; border: 1px solid var(--border); padding: 40px; background: var(--surface); position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--border) 1px, transparent 1px); background-size: 20px 20px; opacity: 0.3;"></div>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 10px; position: relative; z-index: 2;">Работаем по СПб и области</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; position: relative; z-index: 2;">Собственное производство. Приезжайте на экскурсию.</p>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <form id="orderForm">
+                    <div class="input-group">
+                        <label>Ваше имя</label>
+                        <input type="text" placeholder="Иван Иванов" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Телефон</label>
+                        <input type="tel" placeholder="+7 (___) ___-__-__" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Задача</label>
+                        <textarea placeholder="Опишите задачу или прикрепите ссылку на чертеж"></textarea>
+                    </div>
+                    <button type="submit" class="btn" style="margin-top: 10px;">Отправить заявку</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div>&copy; 2024 MFACTURED. Все права защищены.</div>
+        <div><a href="privacy.html" style="color:var(--text-muted); text-decoration:underline;">Политика конфиденциальности</a></div>
+    </footer>
+
+    <!-- СКРИПТЫ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    
     <script>
         // 1. Инициализация 3D
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
         
-        // Камера (смотрим прямо на станок)
+        // Камера
         const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
         camera.position.set(0, 2, 15);
 
@@ -13,7 +402,7 @@
         renderer.outputEncoding = THREE.sRGBEncoding; 
         container.appendChild(renderer.domElement);
 
-        // Свет (сделаем его более холодным и контрастным)
+        // Свет
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
         scene.add(ambientLight);
         
@@ -21,7 +410,7 @@
         spotLight.position.set(10, 20, 10);
         scene.add(spotLight);
         
-        const pointLight = new THREE.PointLight(0xFF4D00, 5); // Оранжевый
+        const pointLight = new THREE.PointLight(0xFF4D00, 5);
         pointLight.position.set(-10, 5, 10);
         scene.add(pointLight);
 
@@ -32,14 +421,14 @@
         loader.load('cnc-machine.glb', function (gltf) {
             model = gltf.scene;
             
-            // Центрируем модель ровно по центру экрана
+            // Центрируем
             const box = new THREE.Box3().setFromObject(model);
             const center = box.getCenter(new THREE.Vector3());
             model.position.x += (model.position.x - center.x);
             model.position.y += (model.position.y - center.y);
             model.position.z += (model.position.z - center.z);
 
-            // Немного поворачиваем станок, чтобы он стоял в 3/4 оборота (так красивее)
+            // Красивый ракурс (поворот на 45 градусов)
             model.rotation.y = Math.PI / 4; 
 
             scene.add(model);
@@ -47,12 +436,11 @@
             console.error('Ошибка загрузки 3D:', error);
         });
 
-        // Отслеживание мыши (только для легкого наклона)
+        // Отслеживание мыши
         let mouseX = 0;
         let mouseY = 0;
 
         document.addEventListener('mousemove', (e) => {
-            // Получаем координаты от -1 до 1
             mouseX = (e.clientX / window.innerWidth) * 2 - 1;
             mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
         });
@@ -62,11 +450,8 @@
             requestAnimationFrame(animate);
             
             if (model) {
-                // Плавно наклоняем станок за мышкой
-                // По X (влево-вправо) - поворачиваем камеру (наклоняем модель)
+                // Плавный наклон (эффект облета камеры)
                 model.rotation.z += (-mouseX * 0.2 - model.rotation.z) * 0.05;
-                
-                // По Y (вверх-вниз) - немного наклоняем вперед/назад
                 model.rotation.x += (mouseY * 0.1 - model.rotation.x) * 0.05;
             }
             
@@ -81,7 +466,43 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
         });
 
-        // --- ОСТАЛЬНЫЕ СКРИПТЫ (Форма, Анимации появления, Скролл) ---
-        
-        // (Оставь код формы, анимации появления reveal и плавного скролла как было)
+        // 2. Форма
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Заявка отправлена! Мы свяжемся с вами.');
+            this.reset();
+        });
+
+        // 3. Анимация появления
+        const reveals = document.querySelectorAll('.reveal');
+        const revealOnScroll = () => {
+            const windowHeight = window.innerHeight;
+            reveals.forEach((reveal) => {
+                if (reveal.getBoundingClientRect().top < windowHeight - 50) {
+                    reveal.classList.add('active');
+                }
+            });
+        };
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll();
+
+        // 4. Плавный скролл
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault(); 
+                const targetId = this.getAttribute('href'); 
+                const targetElement = document.querySelector(targetId); 
+                if (targetElement) {
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 20; 
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth" 
+                    });
+                }
+            });
+        });
     </script>
+</body>
+</html>
